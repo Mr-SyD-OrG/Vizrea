@@ -81,7 +81,7 @@ async def handle_re_callback(client, callback_query):
         sydfile = {
             'file_name': f['file_name'],
             'file_size': getattr(dummy_message.document or dummy_message.video, "file_size", 0),
-            'message_id': dummy_message.id,
+            'message_id': f['file_id'],,
             'media': dummy_message.document or dummy_message.video,
             'message': dummy_message
         }
