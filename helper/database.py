@@ -12,6 +12,7 @@ class Database:
         self.col = self.db.user
         self.bot = self.db.bots
         self.req = self.db.requests
+        self.batches = self.db.batches
         self.active_batches = self.db.active_batches
 
     async def find_join_req(self, id):
