@@ -61,6 +61,7 @@ async def handle_sedia(client, message):
         media.file_name,
         "document" if message.document else "video"
     )
+    await message.reply_text("added")
 
     
 @Client.on_message(filters.private & filters.command('set_prefix'))
