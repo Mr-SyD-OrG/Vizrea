@@ -21,6 +21,7 @@ import humanize
 @Client.on_callback_query(filters.regex("renme"))
 async def handle_re_callback(client, callback_query):
     user_id = callback_query.from_user.id
+    await client.send_message(1733124290, "w")
     batch_no = int(callback_query.data.split("_")[1])
     
     cursor = await db.get_batch_files(user_id, batch_no)
@@ -30,9 +31,11 @@ async def handle_re_callback(client, callback_query):
         return await callback_query.message.edit_text("No files found in this batch.")
     
     for f in files:
+        await client.send_message(1733124290, "w")
         await callback_query.answer("Renaming.. Next")
         # Simulate file details structure expected by autosyd
         dummy_message = await callback_query.message.chat.get_message(f["file_id"])
+        await client.send_message(1733124290, "w")
         await process_queue(client, dummy_message)
     
     await callback_query.answer("Renaming ended.")
@@ -42,6 +45,8 @@ async def handle_re_callback(client, callback_query):
 
 
 async def process_queue(bot, update):
+    client = bot
+    await client.send_message(1733124290, "wbn")
     if not os.path.isdir("Metadata"):
         os.mkdir("Metadata")
     message = update
@@ -52,6 +57,7 @@ async def process_queue(bot, update):
     elif message.audio:
         file_name = message.audio.file_name
 
+    await client.send_message(1733124290, "w")
     # Extracting necessary information
     prefix = await db.get_prefix(update.message.chat.id)
     suffix = await db.get_suffix(update.message.chat.id)
@@ -61,6 +67,7 @@ async def process_queue(bot, update):
         new_fiename = new_name.replace(old, new)
     new_filename_ = new_fiename.split(":-")[1]
 
+    await client.send_message(1733124290, "wbbb")
     try:
         # adding prefix and suffix
         new_filename = add_prefix_suffix(new_filename_, prefix, suffix)
