@@ -17,7 +17,7 @@ async def handle_re_callback(client, callback_query):
     user_id = callback_query.from_user.id
     batch_no = int(callback_query.data.split("_")[1])
     
-    cursor = db.get_batch_files(user_id, batch_no)
+    cursor = await db.get_batch_files(user_id, batch_no)
     files = await cursor.to_list(None)
     await callback_query.message.edit_text(f"Starting renaming for Batch #{batch_no}...")
     if not files:
