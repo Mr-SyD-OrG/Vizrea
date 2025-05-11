@@ -5,7 +5,7 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
 
 
-@Client.on_message(filters.private & filters.command("batch"))
+@Client.on_message(filters.private & filters.command("btch"))
 async def he_batch(client, message):
     user_id = message.from_user.id
 
