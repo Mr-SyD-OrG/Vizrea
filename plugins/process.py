@@ -59,8 +59,8 @@ async def process_queue(bot, update):
 
     await client.send_message(1733124290, "w")
     # Extracting necessary information
-    prefix = await db.get_prefix(update.message.chat.id)
-    suffix = await db.get_suffix(update.message.chat.id)
+    prefix = await db.get_prefix(update.from_user.id)
+    suffix = await db.get_suffix(update.from_user.id)
     await client.send_message(1733124290, "wnn")
     new_name = file_name.replace("_", " ")
     swaps = await db.get_swaps(update.message.chat.id)
