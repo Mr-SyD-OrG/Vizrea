@@ -167,7 +167,7 @@ episode_number = extract_episode_number(filename)
 print(f"Extracted Episode Number: {episode_number}")
 
 # Inside the handler for file uploads
-@Client.on_message(filters.document | filters.video | filters.audio)
+@Client.on_message(filters.command("btch") & filters.private)
 async def refuntion(client, message):
     global processing
     syd_id = {MRSYD, MRSYD}
