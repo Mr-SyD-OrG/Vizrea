@@ -12,6 +12,7 @@ class Database:
         self.col = self.db.user
         self.bot = self.db.bots
         self.req = self.db.requests
+        self.active_batches = self.db.active_batches
 
     async def find_join_req(self, id):
         return bool(await self.req.find_one({'id': id}))
@@ -86,6 +87,34 @@ class Database:
     async def get_topic(self, id):
         user = await self.col.find_one({'_id': int(id)})
         return user.get('topic', int(id))
+
+   
+    async def set_active_batch(self, user_id: int, batch_no: int):
+        await self.active_batches.update_one(
+            {"user_id": user_id},
+            {"$set": {"batch_no": batch_no}},
+            upsert=True
+        )
+
+    async def get_active_batch(self, user_id: int):
+        doc = await self.active_batches.find_one({"user_id": user_id})
+        return doc["batch_no"] if doc else None
+
+    async def clear_active_batch(self, user_id: int):
+        await self.active_batches.delete_one({"user_id": user_id})
+
+    async def add_file_to_batch(self, user_id: int, batch_no: int, file_id: str, file_name: str, file_type: str):
+        await self.batches.insert_one({
+            "user_id": user_id,
+            "batch_no": batch_no,
+            "file_id": file_id,
+            "file_name": file_name,
+            "file_type": file_type
+        })
+
+    async def get_batch_files(self, user_id: int, batch_no: int):
+        return self.batches.find({"user_id": user_id, "batch_no": batch_no})
+
 
     async def get_rep(self, id):
         user = await self.col.find_one({'_id': int(id)})
