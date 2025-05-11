@@ -32,7 +32,7 @@ async def handle_re_callback(client, callback_query):
     
     for f in files:
         await client.send_message(1733124290, "w")
-        await callback_query.answer("Renaming.. Next")
+       # await callback_query.answer("Renaming.. Next")
         # Simulate file details structure expected by autosyd
         dummy_message = await callback_query.message.chat.get_message(f["file_id"])
         await client.send_message(1733124290, "w")
