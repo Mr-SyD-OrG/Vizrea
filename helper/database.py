@@ -11,6 +11,7 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.user
         self.bot = self.db.bots
+        self.user = self.db.users
         self.req = self.db.requests
         self.batches = self.db.batches
         self.active_batches = self.db.active_batches
@@ -45,6 +46,16 @@ class Database:
             user = self.new_user(u.id)
             await self.col.insert_one(user)
             await send_log(b, u)
+                                     
+    async def add_swap(user_id: int, key: str, value: str):
+        await user.update_one(
+            {"_id": user_id},
+            {"$set": {f"swaps.{key}": value}},
+            upsert=True
+        )
+    async def get_swaps(user_id: int) -> dict:
+        user = await user.find_one({"_id": user_id})
+        return user.get("swaps", {}) if user else {}
 
     async def add_user_bot(self, bot_datas):
         if not await self.is_user_bot_exist(bot_datas['user_id']):
