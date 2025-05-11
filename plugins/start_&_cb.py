@@ -55,29 +55,7 @@ async def sydson(client, message):
     await message.reply_text(text="Sᴇᴛ ᴛʀᴜᴇ ᴏʀ ꜰᴀʟꜱᴇ, ɪꜰ ꜱᴇᴀꜱᴏɴ ɴᴜᴍʙᴇʀ ɪꜱ ᴛᴏ ʙᴇ ɪɴ ꜰɪʟᴇ ᴇᴠᴇʀʏᴛɪᴍᴇ (ɪꜰ ꜰɪʟᴇ ᴅᴏɴᴛ ʜᴀᴠᴇ ꜱᴇᴀꜱᴏɴ ɴᴏ. ɪᴛ ᴡɪʟʟ ʙᴇ ᴅᴇꜰᴜᴀʟᴛ ᴛᴏ 1) ᴏʀ ꜰᴀʟꜱᴇ ᴛᴏ ᴀᴠᴏɪᴅ ꜱᴇᴀꜱᴏɴ ᴛᴀɢ", reply_markup=button)   
 
 
-@Client.on_message(filters.private & (filters.document | filters.audio | filters.video))
-async def rename_start(client, message):
-    file = getattr(message, message.media.value)
-    filename = file.file_name
-    filesize = humanize.naturalsize(file.file_size)
-    
-    if file.file_size > 2000 * 1024 * 1024:
-        if not await db.is_user_bot_exist(Config.ADMIN[0]):
-            return await message.reply_text("**⚠️ Sᴏʀʀy Bʀᴏ, Yᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴀ ᴩʀᴇᴍɪᴜᴍ ᴜꜱᴇʀ 🥺..... ᴩʟᴇᴀꜱᴇ ʙᴇᴄᴀᴍᴇ..... ⚡**")
 
-    try:
-        text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
-        buttons = [[InlineKeyboardButton("📝 Rᴇɴᴀᴍᴇ 📝", callback_data="rename")],
-                   [InlineKeyboardButton("✖️ CᴀɴᴄᴇL ✖️", callback_data="close")]]
-        await message.reply_text(text=text, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup(buttons))
-    except FloodWait as e:
-        await sleep(e.value)
-        text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
-        buttons = [[InlineKeyboardButton("📝 Rᴇɴᴀᴍᴇ 📝", callback_data="rename")],
-                   [InlineKeyboardButton("✖️ CᴀɴᴄᴇL ✖️", callback_data="close")]]
-        await message.reply_text(text=text, reply_to_message_id=message.id, reply_markup=InlineKeyboardMarkup(buttons))
-    except:
-        pass
 @Client.on_message(filters.command("start") & filters.chat(-1002687879857))
 async def sydstart(client, message):
     await message.reply_text(".")
