@@ -53,12 +53,3 @@ async def handle_batch(client, message: Message):
     ])
 
     await message.reply_text(text, reply_markup=keyboard)
-
-@Client.on_callback_query()
-async def handle_buttons(client, query):
-    data = query.data
-    if data == "rename_now":
-        await query.answer("Rename option selected.")
-    elif data == "schedule":
-        await query.answer("Schedule option selected.")
-
