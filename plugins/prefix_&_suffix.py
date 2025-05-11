@@ -5,57 +5,63 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
 
 
-@Client.on_message(filters.private & filters.command("btch"))
-async def he_batch(client, message):
+
+
+@Client.on_message(filters.command("batch") & filters.private)
+async def start_batch(client, message):
     user_id = message.from_user.id
+    last = await db.batches.find({"user_id": user_id}).sort("batch_no", -1).to_list(1)
+    batch_no = last[0]["batch_no"] + 1 if last else 1
+    await db.set_active_batch(user_id, batch_no)
+    await message.reply_text(f"Batch #{batch_no} started.\nSend files now. Type `endbatch` to finish.")
 
-    await message.reply("Batch started. Send your files now.\nSend `end_batch` to finish.", parse_mode="markdown")
 
-    collected_files = []
+@Client.on_message(filters.command("endbatch") & filters.private)
+async def end_batch(client, message):
+    user_id = message.from_user.id
+    batch_no = await db.get_active_batch(user_id)
+    if not batch_no:
+        return await message.reply_text("No active batch.")
 
-    while True:
-        try:
-            msg: Message = await client.ask(
-                user_id,
-                filters=filters.private & (filters.document | filters.video | filters.text),
-                timeout=300  # Optional timeout in seconds
-            )
-        except asyncio.TimeoutError:
-            break
+    await db.clear_active_batch(user_id)
+    files_cursor = await db.get_batch_files(user_id, batch_no)
+    files = await files_cursor.to_list(length=None)
 
-        if msg.text and msg.text.strip().lower() == "end_batch":
-            break
+    if not files:
+        return await message.reply_text("No files found in this batch.")
 
-        if msg.document or msg.video:
-            collected_files.append(msg)
-
-    if not collected_files:
-        return await message.reply_text("No files received in this batch.")
-
-    total = len(collected_files)
-    text = f"Received {total} files\n"
-
-    if total > 15:
-        for msg in collected_files:
-            media = msg.document or msg.video
-            if media and media.file_name:
-                name = media.file_name
-                parts = name.replace("_", " ").split()
-                info = " / ".join([p for p in parts if "ep" in p.lower() or "1080" in p or "720" in p])
-                text += f"- {info or 'Unknown'}\n"
+    text = f"Received {len(files)} files in Batch #{batch_no}\n"
+    if len(files) > 15:
+        for f in files:
+            part = f["file_name"]
+            episode = next((x for x in part.split() if "ep" in x.lower() or "720" in x or "1080" in x), "File")
+            text += f"- {episode}\n"
     else:
-        for msg in collected_files:
-            media = msg.document or msg.video
-            if media and media.file_name:
-                text += f"- {media.file_name}\n"
+        text += "\n".join(f"- {f['file_name']}" for f in files)
 
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Rename Now", callback_data="rename_now")],
-        [InlineKeyboardButton("Schedule", callback_data="schedule")]
+        [InlineKeyboardButton("Rename Now", callback_data=f"rename_{batch_no}")],
+        [InlineKeyboardButton("Schedule", callback_data=f"schedule_{batch_no}")]
     ])
-
     await message.reply_text(text, reply_markup=keyboard)
 
+
+@Client.on_message(filters.private & (filters.document | filters.video))
+async def handle_media(client, message):
+    user_id = message.from_user.id
+    batch_no = await db.get_active_batch(user_id)
+    if not batch_no:
+        return
+    media = message.document or message.video
+    await db.add_file_to_batch(
+        user_id,
+        batch_no,
+        media.file_id,
+        media.file_name,
+        "document" if message.document else "video"
+    )
+
+    
 @Client.on_message(filters.private & filters.command('set_prefix'))
 async def add_caption(client, message):
 
