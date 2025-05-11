@@ -1,16 +1,22 @@
 import random
 import logging
+import asyncio
+import os
+import time
+from time import sleep
+from PIL import Image
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
 from pyrogram import Client, filters, enums
-from pyrogram.enums import ParseMode
 from pyrogram.errors import FloodWait, ChatAdminRequired
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto, CallbackQuery
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto, CallbackQuery, ForceReply
+from pyrogram.enums import ParseMode, MessageMediaType
 from helper.database import db
 from config import Config, Txt
 from info import AUTH_CHANNEL
-from helper.utils import is_req_subscribed
+from helper.utils import progress_for_pyrogram, convert, humanbytes, add_prefix_suffix, is_req_subscribed, client, start_clone_bot
+from helper.ffmpeg import fix_thumb, take_screen_shot
 import humanize
-from time import sleep
-
 
 @Client.on_callback_query(filters.regex("renme"))
 async def handle_re_callback(client, callback_query):
@@ -24,6 +30,7 @@ async def handle_re_callback(client, callback_query):
         return await callback_query.message.edit_text("No files found in this batch.")
     
     for f in files:
+        await callback_query.answer("Renaming.. Next")
         # Simulate file details structure expected by autosyd
         dummy_message = await callback_query.message.chat.get_message(f["file_id"])
         await process_queue(client, dummy_message)
