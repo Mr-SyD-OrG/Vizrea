@@ -173,6 +173,9 @@ class Database:
         user = await self.col.find_one({'_id': int(id)})
         return user.get('suffix', None)
 
+    async def remove_batch(self, user_id: int, batch_no: int):
+        await self.batches.delete_many({"user_id": user_id, "batch_no": batch_no})
+
     async def set_metadata(self, id, bool_meta):
         await self.col.update_one({'_id': int(id)}, {'$set': {'metadata': bool_meta}})
 
