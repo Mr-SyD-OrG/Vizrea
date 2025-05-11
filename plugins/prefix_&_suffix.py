@@ -6,7 +6,7 @@ import asyncio
 
 
 @Client.on_message(filters.private & filters.command("batch"))
-async def handle_batch(client, message):
+async def he_batch(client, message):
     user_id = message.from_user.id
 
     await message.reply("Batch started. Send your files now.\nSend `end_batch` to finish.", parse_mode="markdown")
