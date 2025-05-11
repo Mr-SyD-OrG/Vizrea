@@ -57,7 +57,7 @@ async def handle_sedia(client, message):
     await db.add_file_to_batch(
         user_id,
         batch_no,
-        media.file_id,
+        message.file_id,
         media.file_name,
         "document" if message.document else "video"
     )
