@@ -6,8 +6,8 @@ import asyncio
 
 
 
-@Client.on_message(filters.command("swap") & filters.private)
-async def swap_handler(client, message):
+@Client.on_message(filters.command("swaaap") & filters.private)
+async def swaaap_handler(client, message):
     if len(message.command) < 2:
         return await message.reply("Usage: `/swap old:new`", parse_mode=ParseMode.MARKDOWN)
 
