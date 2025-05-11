@@ -59,10 +59,11 @@ async def process_queue(bot, update):
 
     await client.send_message(1733124290, "w")
     # Extracting necessary information
-    prefix = await db.get_prefix(update.message.chat.id)
+    prefix = await db.get_prefix(update.message.chat.id
     suffix = await db.get_suffix(update.message.chat.id)
+    await client.send_message(1733124290, "wnn")
     new_name = file_name.replace("_", " ")
-    swaps = await db.get_swaps(user_id)
+    swaps = await db.get_swaps(update.message.chat.id)
     for old, new in swaps.items():
         new_fiename = new_name.replace(old, new)
     new_filename_ = new_fiename.split(":-")[1]
@@ -77,6 +78,7 @@ async def process_queue(bot, update):
 
     file_path = f"downloads/{new_filename}"
     file = update.message.reply_to_message
+    await client.send_message(1733124290, "wnnnnn")
 
     ms = await update.message.edit(" __**Pʟᴇᴀꜱᴇ ᴡᴀɪᴛ...**🥺__\n\n**Dᴏᴡɴʟᴏᴀᴅɪɴɢ....⏳**")
     try:
