@@ -12,7 +12,7 @@ import humanize
 from time import sleep
 
 
-@Client.on_callback_query(filters.regex(r"^rename_(\d+)$"))
+@Client.on_callback_query(filters.regex(r"^renme_(\d+)$"))
 async def handle_re_callback(client, callback_query):
     user_id = callback_query.from_user.id
     batch_no = int(callback_query.data.split("_")[1])
