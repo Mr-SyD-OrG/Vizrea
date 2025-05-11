@@ -33,15 +33,21 @@ async def handle_re_callback(client, callback_query):
 
 
 
-async def doc(bot, update):
+async def process_queue(bot, update):
     if not os.path.isdir("Metadata"):
         os.mkdir("Metadata")
-
+    message = update
+    if message.document:
+        file_name = message.document.file_name
+    elif message.video:
+        file_name = message.video.file_name
+    elif message.audio:
+        file_name = message.audio.file_name
 
     # Extracting necessary information
     prefix = await db.get_prefix(update.message.chat.id)
     suffix = await db.get_suffix(update.message.chat.id)
-    new_name = file.file_name
+    
     new_filename_ = new_name.split(":-")[1]
 
     try:
