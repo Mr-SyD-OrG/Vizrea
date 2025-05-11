@@ -41,7 +41,7 @@ async def end_batch(client, message):
         text += "\n".join(f"- {f['file_name']}" for f in files)
 
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Rename Now", callback_data=f"rename_{batch_no}")],
+        [InlineKeyboardButton("Rename Now", callback_data=f"renme_{batch_no}")],
         [InlineKeyboardButton("Schedule", callback_data=f"schedule_{batch_no}")]
     ])
     await message.reply_text(text, reply_markup=keyboard)
