@@ -47,8 +47,11 @@ async def process_queue(bot, update):
     # Extracting necessary information
     prefix = await db.get_prefix(update.message.chat.id)
     suffix = await db.get_suffix(update.message.chat.id)
-    
-    new_filename_ = new_name.split(":-")[1]
+    new_name = file_name.replace("_", " ")
+    swaps = await db.get_swaps(user_id)
+    for old, new in swaps.items():
+        new_fiename = new_name.replace(old, new)
+    new_filename_ = new_fiename.split(":-")[1]
 
     try:
         # adding prefix and suffix
