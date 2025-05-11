@@ -19,7 +19,7 @@ async def handle_re_callback(client, callback_query):
     
     cursor = db.get_batch_files(user_id, batch_no)
     files = await cursor.to_list(None)
-    
+    await callback_query.message.edit_text(f"Starting renaming for Batch #{batch_no}...")
     if not files:
         return await callback_query.message.edit_text("No files found in this batch.")
     
@@ -28,9 +28,10 @@ async def handle_re_callback(client, callback_query):
         dummy_message = await callback_query.message.chat.get_message(f["file_id"])
         await process_queue(client, dummy_message)
     
-    await callback_query.answer("Renaming started.")
-    await callback_query.message.edit_text(f"Started renaming files in Batch #{batch_no}.")
+    await callback_query.answer("Renaming ended.")
+    await db.remove_batch(user_id, batch_no)
 
+    
 
 
 async def process_queue(bot, update):
