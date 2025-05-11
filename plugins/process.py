@@ -64,9 +64,10 @@ async def process_queue(bot, update):
     await client.send_message(1733124290, "wnn")
     new_name = file_name.replace("_", " ")
     swaps = await db.get_swaps(update.from_user.id)
-    for old, new in swaps.items():
-        new_fiename = new_name.replace(old, new)
-    new_filename_ = new_fiename.split(":-")[1]
+    if swaps:
+        for old, new in swaps.items():
+            new_name = new_name.replace(old, new)
+    new_filename_ = new_name.split(":-")[1]
 
     await client.send_message(1733124290, "wbbb")
     try:
