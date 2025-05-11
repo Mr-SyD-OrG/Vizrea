@@ -6,6 +6,18 @@ import asyncio
 
 
 
+@Client.on_message(filters.command("swap") & filters.private)
+async def swap_handler(client, message):
+    if len(message.command) < 2:
+        return await message.reply("Usage: `/swap old:new`", parse_mode=ParseMode.MARKDOWN)
+
+    try:
+        pair = message.text.split(None, 1)[1]
+        old, new = pair.split(":", 1)
+        await db.add_swap(message.from_user.id, old, new)
+        await message.reply(f"✅ Swap saved!\n`{old}` will be replaced with `{new}`", parse_mode=ParseMode.MARKDOWN)
+    except Exception as e:
+        await message.reply(f"❌ Failed to save swap.\n\nError: `{e}`", parse_mode=ParseMode.MARKDOWN)
 
 @Client.on_message(filters.command("batch") & filters.private)
 async def start_batch(client, message):
