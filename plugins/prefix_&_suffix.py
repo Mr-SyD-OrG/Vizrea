@@ -47,7 +47,7 @@ async def end_batch(client, message):
 
 
 @Client.on_message(filters.private & (filters.document | filters.video))
-async def handle_media(client, message):
+async def handle_sedia(client, message):
     user_id = message.from_user.id
     batch_no = await db.get_active_batch(user_id)
     if not batch_no:
