@@ -63,33 +63,4 @@ async def sydstart(client, message):
 
 
 
-@Client.on_callback_query(filters.regex(r"^rename_(\d+)$"))
-async def handle_re_callback(client, callback_query):
-    user_id = callback_query.from_user.id
-    batch_no = int(callback_query.data.split("_")[1])
-    
-    cursor = db.get_batch_files(user_id, batch_no)
-    files = await cursor.to_list(None)
-    
-    if not files:
-        return await callback_query.message.edit_text("No files found in this batch.")
-    
-    for f in files:
-        # Simulate file details structure expected by autosyd
-        dummy_message = await callback_query.message.chat.get_message(f["file_id"])
-        
-        sydfile = {
-            'file_name': f['file_name'],
-            'file_size': getattr(dummy_message.document or dummy_message.video, "file_size", 0),
-            'message_id': f['file_id'],,
-            'media': dummy_message.document or dummy_message.video,
-            'message': dummy_message
-        }
-        mrsydt_g.append(sydfile)
-    
-    if not processing:
-        processing = True
-        await process_queue(client)
-    
-    await callback_query.answer("Renaming started.")
-    await callback_query.message.edit_text(f"Started renaming files in Batch #{batch_no}.")
+
