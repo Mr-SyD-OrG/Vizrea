@@ -44,8 +44,8 @@ async def end_batch(client, message):
 
     # Add your custom buttons below the feature buttons
     extra_buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Rename Now", callback_data=f"renme_{batch_no}")],
-        [InlineKeyboardButton("Schedule", callback_data=f"schedule_{batch_no}")]
+        [InlineKeyboardButton("Rename Now", callback_data=f"renme_{batch_no}_d")],
+        [InlineKeyboardButton("Schedule", callback_data=f"renme_{batch_no}_v")]
     ])
 
     # Extend the inline keyboard
