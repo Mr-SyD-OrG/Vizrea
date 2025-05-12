@@ -162,7 +162,7 @@ async def delete_rep(client, message):
 @Client.on_message(filters.private & filters.command('set_topic'))
 async def add_topic(client, message):
     if len(message.command) < 2:
-        return await message.reply_text("Usage: `/swap old:new`", parse_mode=ParseMode.MARKDOWN)
+        return await message.reply_text("Usage: `/swap old:new`", parse_mode=enums.ParseMode.MARKDOWN)
 
     try:
         pair = message.text.split(None, 1)[1]
