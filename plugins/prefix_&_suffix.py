@@ -161,19 +161,13 @@ async def delete_rep(client, message):
 
 @Client.on_message(filters.private & filters.command('set_topic'))
 async def add_topic(client, message):
-    if len(message.command) == 1:
-        return await message.reply_text("**__Give The ᴅᴜᴍᴩ ᴄʜᴀɴɴᴇʟ ɪᴅ__\n\nExᴀᴍᴩʟᴇ:- `/set_dump -1002042969565`**")
-    mrsyd = message.text.split(" ", 1)[1]
-   # mrsyd = await client.ask(message.from_user.id, "<b>ꜱᴇɴᴅ ᴍᴇ ᴛʜᴇ ᴛᴏᴩɪᴄ ɪᴅ ᴏʀ ʟɪɴᴋ.\n\n/cancel - ᴄᴀɴᴄᴇʟ ᴛʜɪs ᴘʀᴏᴄᴇss.</b>")
-    if mrsyd.startswith("https://t.me/"):
-        match = re.search(r"/(\d+)$", mrsyd)
-        if match:
-            topic_id = match.group(1)
-            txt = topic_id
-        else:
-            return await message.reply("<b>⚠ Invalid link provided. Make sure it ends with a numeric topic ID.</b>")
-    else:
-        txt = mrsyd.split(" ", 1)[0]
-    SyD = await message.reply_text("Please Wait ...", reply_to_message_id=message.id)
-    await db.set_topic(message.from_user.id, txt)
-    await SyD.edit("__**✅ ᴛᴏᴩɪᴄ ꜱᴀᴠᴇᴅ**__")
+    if len(message.command) < 2:
+        return await message.reply_text("Usage: `/swap old:new`", parse_mode=ParseMode.MARKDOWN)
+
+    try:
+        pair = message.text.split(None, 1)[1]
+        old, new = pair.split(":", 1)
+        await db.add_swap(message.from_user.id, old, new)
+        await message.reply(f"✅ Swap saved!\n`{old}` will be replaced with `{new}`", parse_mode=ParseMode.MARKDOWN)
+    except Exception as e:
+        await message.reply(f"❌ Failed to save swap.\n\nError: `{e}`", parse_mode=ParseMode.MARKDOWN)
