@@ -21,9 +21,9 @@ import humanize
 @Client.on_callback_query(filters.regex("renme"))
 async def handle_re_callback(client, callback_query):
     user_id = callback_query.from_user.id
-    await client.send_message(1733124290, "w")
+
     batch_no = int(callback_query.data.split("_")[1])
-    tpe = callback_query.data.split("_")[2]
+   # tpe = callback_query.data.split("_")[2]
     
     cursor = await db.get_batch_files(user_id, batch_no)
     files = await cursor.to_list(None)
