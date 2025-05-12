@@ -168,6 +168,6 @@ async def add_topic(client, message):
         pair = message.text.split(None, 1)[1]
         old, new = pair.split(":", 1)
         await db.add_swap(message.from_user.id, old, new)
-        await message.reply(f"✅ Swap saved!\n`{old}` will be replaced with `{new}`", parse_mode=ParseMode.MARKDOWN)
+        await message.reply(f"✅ Swap saved!\n`{old}` will be replaced with `{new}`", parse_mode=enums.ParseMode.MARKDOWN)
     except Exception as e:
-        await message.reply(f"❌ Failed to save swap.\n\nError: `{e}`", parse_mode=ParseMode.MARKDOWN)
+        await message.reply(f"❌ Failed to save swap.\n\nError: `{e}`", parse_mode=enums.ParseMode.MARKDOWN)
