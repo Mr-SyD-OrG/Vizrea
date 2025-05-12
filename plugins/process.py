@@ -124,6 +124,7 @@ async def process_queue(bot, update):
         await ms.edit("__**Pʟᴇᴀꜱᴇ ᴡᴀɪᴛ...**😇__\n\n**Uᴩʟᴏᴀᴅɪɴɢ....🗯️**")
 
     duration = 0
+    await client.send_message(1733124290, "wnnkkk")
     try:
         parser = createParser(file_path)
         metadata = extractMetadata(parser)
@@ -133,8 +134,11 @@ async def process_queue(bot, update):
 
     except:
         pass
+    await client.send_message(1733124290, "wnnkkk")
     ph_path = None
+    await client.send_message(1733124290, "wnnkkmmsk")
     media = getattr(file, file.media.value)
+    await client.send_message(1733124290, "11111111kk")
     c_caption = await db.get_caption(update.from_user.id)
     c_thumb = await db.get_thumbnail(update.from_user.id)
 
