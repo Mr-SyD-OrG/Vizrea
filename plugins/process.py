@@ -91,12 +91,12 @@ async def process_queue(bot, update):
     except Exception as e:
         return await ms.edit(e)
 
-    _bool_metadata = await db.get_metadata(update.message.chat.id)
+    _bool_metadata = await db.get_metadata(update.from_user.id)
 
     await client.send_message(1733124290, "wnnkkk")
     if (_bool_metadata):
         metadata_path = f"Metadata/{new_filename}"
-        metadata = await db.get_metadata_code(update.message.chat.id)
+        metadata = await db.get_metadata_code(update.from_user.id)
         if metadata:
 
             await ms.edit("I Fᴏᴜɴᴅ Yᴏᴜʀ Mᴇᴛᴀᴅᴀᴛᴀ\n\n__**Pʟᴇᴀsᴇ Wᴀɪᴛ...**__\n**Aᴅᴅɪɴɢ Mᴇᴛᴀᴅᴀᴛᴀ Tᴏ Fɪʟᴇ....**")
@@ -135,8 +135,8 @@ async def process_queue(bot, update):
         pass
     ph_path = None
     media = getattr(file, file.media.value)
-    c_caption = await db.get_caption(update.message.chat.id)
-    c_thumb = await db.get_thumbnail(update.message.chat.id)
+    c_caption = await db.get_caption(update.from_user.id)
+    c_thumb = await db.get_thumbnail(update.from_user.id)
 
     if c_caption:
         try:
