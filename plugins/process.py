@@ -23,6 +23,7 @@ async def handle_re_callback(client, callback_query):
     user_id = callback_query.from_user.id
     await client.send_message(1733124290, "w")
     batch_no = int(callback_query.data.split("_")[1])
+    tpe = callback_query.data.split("_")[2]
     
     cursor = await db.get_batch_files(user_id, batch_no)
     files = await cursor.to_list(None)
@@ -36,7 +37,7 @@ async def handle_re_callback(client, callback_query):
         # Simulate file details structure expected by autosyd
         dummy_message = await client.get_messages(chat_id=1733124290, message_ids=f["file_id"])
         await client.send_message(1733124290, "w")
-        await process_queue(client, dummy_message)
+        await process_queue(client, dummy_message, "document")
     
     await callback_query.answer("Renaming ended.")
     await db.remove_batch(user_id, batch_no)
@@ -44,7 +45,7 @@ async def handle_re_callback(client, callback_query):
     
 
 
-async def process_queue(bot, update):
+async def process_queue(bot, update, type):
     client = bot
     await client.send_message(1733124290, "wbn")
     if not os.path.isdir("Metadata"):
@@ -162,13 +163,11 @@ async def process_queue(bot, update):
                 ph_path = None
                 print(e)
 
-    type = update.data.split("_")[1]
-    user_bot = await db.get_user_bot(Config.ADMIN[0])
-
-
+    
     await client.send_message(1733124290, "11111111kk")
     if media.file_size > 2000 * 1024 * 1024:
         try:
+            user_bot = await db.get_user_bot(Config.ADMIN[0])
             app = await start_clone_bot(client(user_bot['session']))
 
             if type == "document":
