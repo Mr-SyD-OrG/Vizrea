@@ -11,7 +11,7 @@ async def add_caption(client, message):
     await message.reply_text("__**✅ Cᴀᴩᴛɪᴏɴ Sᴀᴠᴇᴅ**__", reply_to_message_id=message.id)
 
 
-@Client.on_message(filters.private & filters.command("swap"))
+@Client.on_message(filters.private & filters.command("mrsyd"))
 async def swaaap_handler(client, message):
     if len(message.command) < 2:
         return await message.reply_text("Usage: `/swap old:new`", parse_mode=ParseMode.MARKDOWN)
