@@ -70,7 +70,7 @@ async def process_queue(bot, update, type):
     await client.send_message(1733124290, "wnn")
     new_name = file_name.replace("_", " ")
     await client.send_message(1733124290, "wnn")
-    swaps = False #await db.get_swaps(update.from_user.id)
+    swaps = await db.get_swaps(update.from_user.id)
     await client.send_message(1733124290, "wnn")
     if swaps:
         await client.send_message(1733124290, "wnkskn")
@@ -89,12 +89,9 @@ async def process_queue(bot, update, type):
 
     _bool_metadata = await db.get_metadata(update.from_user.id)
 
-    if (_bool_metadata):
-        metadata_path = f"Metadata/{new_filename}"
-        file_path = metadata_path
-    else:
-        metadata_path = None
-        file_path = f"downloads/{new_filename}"
+    
+    
+    file_path = f"downloads/{new_filename}"
     file = update
     await client.send_message(1733124290, "wnnnnn")
 
@@ -110,7 +107,7 @@ async def process_queue(bot, update, type):
         
         metadata = await db.get_metadata_code(update.from_user.id)
         if metadata:
-
+            metadata_path = f"Metadata/{new_filename}"
             await ms.edit("I Fᴏᴜɴᴅ Yᴏᴜʀ Mᴇᴛᴀᴅᴀᴛᴀ\n\n__**Pʟᴇᴀsᴇ Wᴀɪᴛ...**__\n**Aᴅᴅɪɴɢ Mᴇᴛᴀᴅᴀᴛᴀ Tᴏ Fɪʟᴇ....**")
             cmd = f"""ffmpeg -i "{path}" {metadata} "{metadata_path}" """
 
