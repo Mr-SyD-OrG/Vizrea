@@ -47,13 +47,13 @@ class Database:
             await self.col.insert_one(user)
             await send_log(b, u)
                                      
-    async def add_swap(user_id: int, key: str, value: str):
+    async def add_swap(self, user_id: int, key: str, value: str):
         await usr.update_one(
             {"_id": user_id},
             {"$set": {f"swaps.{key}": value}},
             upsert=True
         )
-    async def get_swaps(user_id: int) -> dict:
+    async def get_swaps(self, user_id: int) -> dict:
         user = await usr.find_one({"_id": user_id})
         return user.get("swaps", {}) if user else {}
 
