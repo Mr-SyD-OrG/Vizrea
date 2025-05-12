@@ -134,9 +134,7 @@ async def process_queue(bot, update):
 
     except:
         pass
-    await client.send_message(1733124290, "wnnkkk")
     ph_path = None
-    await client.send_message(1733124290, "wnnkkmmsk")
     media = getattr(file, file.media.value)
     await client.send_message(1733124290, "11111111kk")
     c_caption = await db.get_caption(update.from_user.id)
@@ -151,6 +149,7 @@ async def process_queue(bot, update):
     else:
         caption = f"**{new_filename}**"
 
+    await client.send_message(1733124290, "11111111kk")
     if (media.thumbs or c_thumb):
         if c_thumb:
             ph_path = await bot.download_media(c_thumb)
@@ -166,6 +165,8 @@ async def process_queue(bot, update):
     type = update.data.split("_")[1]
     user_bot = await db.get_user_bot(Config.ADMIN[0])
 
+
+    await client.send_message(1733124290, "11111111kk")
     if media.file_size > 2000 * 1024 * 1024:
         try:
             app = await start_clone_bot(client(user_bot['session']))
@@ -237,7 +238,7 @@ async def process_queue(bot, update):
         try:
             if type == "document":
                 await bot.send_document(
-                    update.message.chat.id,
+                    update.from_user.id,
                     document=metadata_path if _bool_metadata else file_path,
                     thumb=ph_path,
                     caption=caption,
@@ -245,7 +246,7 @@ async def process_queue(bot, update):
                     progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
             elif type == "video":
                 await bot.send_video(
-                    update.message.chat.id,
+                    update.from_user.id,
                     video=metadata_path if _bool_metadata else file_path,
                     caption=caption,
                     thumb=ph_path,
@@ -256,7 +257,7 @@ async def process_queue(bot, update):
                     progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
             elif type == "audio":
                 await bot.send_audio(
-                    update.message.chat.id,
+                    update.from_user.id,
                     audio=metadata_path if _bool_metadata else file_path,
                     caption=caption,
                     thumb=ph_path,
