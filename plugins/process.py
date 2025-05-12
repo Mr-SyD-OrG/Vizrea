@@ -70,8 +70,9 @@ async def process_queue(bot, update):
         await client.send_message(1733124290, "wnkskn")
         for old, new in swaps.items():
             new_name = new_name.replace(old, new)
+    
+    await client.send_message(1733124290, "wnn")
     new_filename_ = new_name
-
     await client.send_message(1733124290, "wbbb")
     try:
         # adding prefix and suffix
@@ -92,6 +93,7 @@ async def process_queue(bot, update):
 
     _bool_metadata = await db.get_metadata(update.message.chat.id)
 
+    await client.send_message(1733124290, "wnnkkk")
     if (_bool_metadata):
         metadata_path = f"Metadata/{new_filename}"
         metadata = await db.get_metadata_code(update.message.chat.id)
