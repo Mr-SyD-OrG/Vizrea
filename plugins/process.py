@@ -70,7 +70,7 @@ async def process_queue(bot, update):
         await client.send_message(1733124290, "wnkskn")
         for old, new in swaps.items():
             new_name = new_name.replace(old, new)
-    new_filename_ = new_name.split(":-")[1]
+    new_filename_ = new_name
 
     await client.send_message(1733124290, "wbbb")
     try:
