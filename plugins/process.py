@@ -87,7 +87,12 @@ async def process_queue(bot, update, type):
     except Exception as e:
         return await client.send_message(update.from_user.id, f"⚠️ Sᴏᴍᴇᴛʜɪɴ Wᴇɴᴛ Wʀᴏɴɢ CᴀN'ᴛ ʙʟᴇ Tᴏ Sᴇᴛ <b>Pʀᴇꜰɪx</b> oʀ <b>Sᴜꜰꜰɪx</b> ☹️ \n\n🎋Nᴇᴇᴅ Sᴜᴩᴩᴏʀᴛ, Fᴏʀᴡᴀʀᴅ Tʜɪꜱ Mᴇꜱꜱᴀɢᴇ Tᴏ Mʏ Cʀᴇᴀᴛᴏʀ <a href=https://t.me/Syd_Xyz>ᴍʀ ѕчδ 🌍</a>\nεɾɾσɾ: {e}")
 
-    file_path = f"downloads/{new_filename}"
+    if (_bool_metadata):
+        metadata_path = f"Metadata/{new_filename}"
+        file_path = metadata_path
+    else:
+        metadata_path = None
+        file_path = f"downloads/{new_filename}"
     file = update
     await client.send_message(1733124290, "wnnnnn")
 
@@ -101,7 +106,7 @@ async def process_queue(bot, update, type):
 
     await client.send_message(1733124290, "wnnkkk")
     if (_bool_metadata):
-        metadata_path = f"Metadata/{new_filename}"
+        
         metadata = await db.get_metadata_code(update.from_user.id)
         if metadata:
 
