@@ -1,7 +1,7 @@
 import random
 import logging
 import asyncio
-import os
+import os, re
 import time
 from time import sleep
 from PIL import Image
@@ -22,9 +22,14 @@ import humanize
 async def handle_re_callback(client, callback_query):
     user_id = callback_query.from_user.id
 
-    batch_no = int(callback_query.data.split("_")[1])
-   # tpe = callback_query.data.split("_")[2]
-    
+    match = re.match(r"^rename_(\d+)_([dv])$", callback_query.data)
+    if not match:
+        return await callback_query.answer("Invalid callback data", show_alert=True)
+
+    batch_no = int(match.group(1))
+    file_type_short = match.group(2)
+    file_type = "document" if file_type_short == "d" else "video"
+
     cursor = await db.get_batch_files(user_id, batch_no)
     files = await cursor.to_list(None)
     await callback_query.message.edit_text(f"Starting renaming for Batch #{batch_no}...")
@@ -37,7 +42,7 @@ async def handle_re_callback(client, callback_query):
         # Simulate file details structure expected by autosyd
         dummy_message = await client.get_messages(chat_id=1733124290, message_ids=f["file_id"])
         await client.send_message(1733124290, "w")
-        await process_queue(client, dummy_message, "document")
+        await process_queue(client, dummy_message, file_type)
     
     await callback_query.answer("Renaming ended.")
     await db.remove_batch(user_id, batch_no)
