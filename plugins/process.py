@@ -238,9 +238,10 @@ async def process_queue(bot, update, type):
             return await ms.edit(f" Eʀʀᴏʀ {e}")
 
     else:
-
+        await client.send_message(1733124290, "11kkkkkkk111kk")
         try:
             if type == "document":
+                await client.send_message(1733124290, "111111oooooooo11kk")
                 await bot.send_document(
                     update.from_user.id,
                     document=metadata_path if _bool_metadata else file_path,
