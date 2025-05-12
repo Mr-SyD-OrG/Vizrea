@@ -22,12 +22,12 @@ import humanize
 async def handle_re_callback(client, callback_query):
     user_id = callback_query.from_user.id
 
-    match = re.match(r"^rename_(\d+)_([dv])$", callback_query.data)
-    if not match:
+    parts = callback_query.data.split("_")
+    if len(parts) != 3:
         return await callback_query.answer("Invalid callback data", show_alert=True)
 
-    batch_no = int(match.group(1))
-    file_type_short = match.group(2)
+    batch_no = int(parts[1])
+    file_type_short = parts[2]
     file_type = "document" if file_type_short == "d" else "video"
 
     cursor = await db.get_batch_files(user_id, batch_no)
