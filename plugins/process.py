@@ -64,7 +64,7 @@ async def process_queue(bot, update):
     await client.send_message(1733124290, "wnn")
     new_name = file_name.replace("_", " ")
     await client.send_message(1733124290, "wnn")
-    swaps = await db.get_swaps(update.from_user.id)
+    swaps = False #await db.get_swaps(update.from_user.id)
     await client.send_message(1733124290, "wnn")
     if swaps:
         await client.send_message(1733124290, "wnkskn")
