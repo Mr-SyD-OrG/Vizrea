@@ -3,7 +3,7 @@ from helper.database import db
 import re
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
-from plugins.features import features_button
+from plugins.features import featres_button
 
 
 @Client.on_message(filters.private & filters.command('del_dump'))
@@ -75,7 +75,7 @@ async def end_batch(client, message):
         text += "\n".join(f"- {f['file_name']}" for f in files)
 
     text += f"\n Current Dump Channel : {dump} \n If You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
-    markup = await features_button(message.from_user.id)
+    markup = await featres_button(message.from_user.id)
 
     # Add your custom buttons below the feature buttons
     extra_buttons = InlineKeyboardMarkup([
