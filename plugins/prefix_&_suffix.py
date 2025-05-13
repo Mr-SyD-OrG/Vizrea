@@ -75,17 +75,15 @@ async def end_batch(client, message):
         text += "\n".join(f"- {f['file_name']}" for f in files)
 
     text += f"\n Current Dump Channel : {dump} \n If You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
-    markup = await features_button(message.from_user.id)
-
-    # Add your custom buttons below the feature buttons
-    extra_buttons = InlineKeyboardMarkup([
+    button = [[
+        InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+        InlineKeyboardButton('✅' if metadata else '❌', callback_data='filters_metadata')
+      ],[
         [InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")],
         [InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")]
-    ])
+    ]]
 
-    markup.inline_keyboard.extend(extra_buttons.inline_keyboard)
-
-    await message.reply_text(text, reply_markup=markup)
+    await message.reply_text(text, reply_markup=button)
 
 
 @Client.on_message(filters.command("process") & filters.private)
