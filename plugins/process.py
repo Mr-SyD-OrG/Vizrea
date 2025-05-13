@@ -18,6 +18,21 @@ from helper.utils import progress_for_pyrogram, convert, humanbytes, add_prefix_
 from helper.ffmpeg import fix_thumb, take_screen_shot, change_metadata
 import humanize
 
+
+@Client.on_callback_query(filters.regex("delsyd"))
+async def handle_re_callback(client, callback_query):
+    user_id = callback_query.from_user.id
+
+    parts = callback_query.data.split("_")
+    if len(parts) != 2:
+        return await callback_query.answer("Invalid callback data", show_alert=True)
+
+    batch_no = int(parts[1])
+    await db.remove_batch(user_id, batch_no)
+    await client.send_message(
+        user_id,
+        "Deleted!"
+    )
 @Client.on_callback_query(filters.regex("renme"))
 async def handle_re_callback(client, callback_query):
     user_id = callback_query.from_user.id
@@ -44,15 +59,20 @@ async def handle_re_callback(client, callback_query):
         await client.send_message(1733124290, "w")
         await process_queue(client, dummy_message, file_type, dump)
     
-    await callback_query.answer("Renaming ended.")
-    await db.remove_batch(user_id, batch_no)
+    await client.send_message(
+        update.from_user.id,
+        "Renaming Ended! \nClick On Delete Data If Renaming Ended Properly Else Use `/process {batch no}`. To Do Again",
+        reply_markup=InlineKeyboardMarkup(
+            [[InlineKeyboardButton("Delete Data", callback_data="delsyd_{batch_no}")]]
+        )
+    )
+    
 
     
 
 
 async def process_queue(bot, update, type, dump):
     client = bot
-    await client.send_message(1733124290, "wbn")
     if not os.path.isdir("Metadata"):
         os.mkdir("Metadata")
     message = update
@@ -63,21 +83,19 @@ async def process_queue(bot, update, type, dump):
     elif message.audio:
         file_name = message.audio.file_name
 
-    await client.send_message(1733124290, "w")
     # Extracting necessary information
     prefix = await db.get_prefix(update.from_user.id)
     suffix = await db.get_suffix(update.from_user.id)
-    await client.send_message(1733124290, "wnn")
     new_name = file_name.replace("_", " ")
-    await client.send_message(1733124290, "wnn")
     swaps = await db.get_swaps(update.from_user.id)
-    await client.send_message(1733124290, "wnn")
-    if swaps:
-        await client.send_message(1733124290, "wnkskn")
-        for old, new in swaps.items():
-            new_name = new_name.replace(old, new)
-    
-    await client.send_message(1733124290, "wnn")
+    try:
+        if swaps:
+            for old, new in swaps.items():
+                new_name = new_name.replace(old, new)
+    except Exception as e:
+        await client.send_message(update.from_user.id, f"Error During Swap : {e}")
+        pass
+        
     new_filename_ = new_name
     await client.send_message(1733124290, "wbbb")
     try:
@@ -227,7 +245,6 @@ async def process_queue(bot, update, type, dump):
         await client.send_message(1733124290, "11kkkkkkk111kk")
         try:
             if type == "document":
-                await client.send_message(1733124290, "111111oooooooo11kk")
                 await bot.send_document(
                     dump,
                     document=metadata_path if _bool_metadata else file_path,
