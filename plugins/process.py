@@ -104,7 +104,7 @@ async def process_queue(bot, update, type):
     
     await client.send_message(1733124290, "wnnkkk")
     if (_bool_metadata):
-                
+        metadata_path = f"Metadata/{new_filename}" 
         metadata = await db.get_metadata_code(update.from_user.id)
         if metadata:
             await ms.edit("I Fᴏᴜɴᴅ Yᴏᴜʀ Mᴇᴛᴀᴅᴀᴛᴀ\n\n__**Pʟᴇᴀsᴇ Wᴀɪᴛ...**__\n**Aᴅᴅɪɴɢ Mᴇᴛᴀᴅᴀᴛᴀ Tᴏ Fɪʟᴇ....**")            
