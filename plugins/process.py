@@ -15,7 +15,7 @@ from helper.database import db
 from config import Config, Txt
 from info import AUTH_CHANNEL
 from helper.utils import progress_for_pyrogram, convert, humanbytes, add_prefix_suffix, is_req_subscribed, client, start_clone_bot
-from helper.ffmpeg import fix_thumb, take_screen_shot
+from helper.ffmpeg import fix_thumb, take_screen_shot, change_metadata
 import humanize
 
 @Client.on_callback_query(filters.regex("renme"))
@@ -104,30 +104,13 @@ async def process_queue(bot, update, type):
     
     await client.send_message(1733124290, "wnnkkk")
     if (_bool_metadata):
-        
+                
         metadata = await db.get_metadata_code(update.from_user.id)
         if metadata:
-            metadata_path = f"Metadata/{new_filename}"
-            await ms.edit("I Fᴏᴜɴᴅ Yᴏᴜʀ Mᴇᴛᴀᴅᴀᴛᴀ\n\n__**Pʟᴇᴀsᴇ Wᴀɪᴛ...**__\n**Aᴅᴅɪɴɢ Mᴇᴛᴀᴅᴀᴛᴀ Tᴏ Fɪʟᴇ....**")
-            cmd = f"""ffmpeg -i "{path}" {metadata} "{metadata_path}" """
-
-            process = await asyncio.create_subprocess_shell(
-                cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-            )
-
-            stdout, stderr = await process.communicate()
-            er = stderr.decode()
-
-            try:
-                if er:
-                    try:
-                        os.remove(path)
-                        os.remove(metadata_path)
-                    except:
-                        pass
-                    return await ms.edit(str(er) + "\n\n**Error**")
-            except BaseException:
-                pass
+            await ms.edit("I Fᴏᴜɴᴅ Yᴏᴜʀ Mᴇᴛᴀᴅᴀᴛᴀ\n\n__**Pʟᴇᴀsᴇ Wᴀɪᴛ...**__\n**Aᴅᴅɪɴɢ Mᴇᴛᴀᴅᴀᴛᴀ Tᴏ Fɪʟᴇ....**")            
+            if change_metadata(dl_path, metadata_path, metadata):            
+                await ms.edit("Metadata Added.....")
+                print("Metadata Added.....")
         await ms.edit("**Metadata added to the file successfully ✅**\n\n⚠️ __**Please wait...**__\n\n**Tʀyɪɴɢ Tᴏ Uᴩʟᴏᴀᴅɪɴɢ....**")
     else:
         await ms.edit("__**Pʟᴇᴀꜱᴇ ᴡᴀɪᴛ...**😇__\n\n**Uᴩʟᴏᴀᴅɪɴɢ....🗯️**")
