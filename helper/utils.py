@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def metadata_text(metadata_code):
+async def metadata_text(metadata_code):
     author = None
     title = None
     video_title = None
