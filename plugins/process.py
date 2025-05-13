@@ -37,7 +37,7 @@ async def handle_re_callback(client, callback_query):
         return await callback_query.message.edit_text("No files found in this batch.")
     
     for f in files:
-        await client.send_message(1733124290, "w")
+
        # await callback_query.answer("Renaming.. Next")
         # Simulate file details structure expected by autosyd
         dummy_message = await client.get_messages(chat_id=1733124290, message_ids=f["file_id"])
