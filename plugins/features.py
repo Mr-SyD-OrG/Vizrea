@@ -21,9 +21,7 @@ async def features_button(user_id):
 async def handle_filters(bot: Client, query: CallbackQuery):
     user_id = query.from_user.id
     type = query.data.split('_')[1]
-    user_metadata = await db.get_metadata_code(user_id)
     if type == 'metadata':
-        text = f'**ʜᴇʀᴇ ᴛʜᴇ ᴀᴠᴀɪʟᴀʙʟᴇ ғᴇᴀᴛᴜʀᴇ** 🍀**\n\nYour Current Metadata:-\n\n➜ `{user_metadata}` '
         get_meta = await db.get_metadata(user_id)
 
         if get_meta:
