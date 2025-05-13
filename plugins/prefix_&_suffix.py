@@ -62,6 +62,9 @@ async def end_batch(client, message):
     if not files:
         return await message.reply_text("No files found in this batch.")
 
+    dump = await db.get_dump(user_id)
+
+
     text = f"Received {len(files)} files in Batch #{batch_no}\n"
     if len(files) > 15:
         for f in files:
@@ -71,12 +74,13 @@ async def end_batch(client, message):
     else:
         text += "\n".join(f"- {f['file_name']}" for f in files)
 
+    text += f"\n Current Dump Channel : {dump} \n If You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
     markup = await features_button(message.from_user.id)
 
     # Add your custom buttons below the feature buttons
     extra_buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Document", callback_data=f"renme_{batch_no}_d")],
-        [InlineKeyboardButton("Video", callback_data=f"renme_{batch_no}_v")]
+        [InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")],
+        [InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")]
     ])
 
     # Extend the inline keyboard
