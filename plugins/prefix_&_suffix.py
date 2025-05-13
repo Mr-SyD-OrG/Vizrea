@@ -69,7 +69,7 @@ async def end_batch(client, message):
     if len(files) > 15:
         for f in files:
             part = f["file_name"]
-            episode = next((x for x in part.split() if "ep" in x.lower() or "720" in x or "1080" in x), "File")
+            episode = next((x for x in part.split() if "ep" in x.lower() or "720" in x or "1080" in x or "480"), "File")
             text += f"- {episode}\n"
     else:
         text += "\n".join(f"- {f['file_name']}" for f in files)
