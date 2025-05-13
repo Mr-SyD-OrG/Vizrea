@@ -35,14 +35,14 @@ async def handle_re_callback(client, callback_query):
     await callback_query.message.edit_text(f"Starting renaming for Batch #{batch_no}...")
     if not files:
         return await callback_query.message.edit_text("No files found in this batch.")
-    
+    dump = await db.get_dump(user_id)
     for f in files:
 
        # await callback_query.answer("Renaming.. Next")
         # Simulate file details structure expected by autosyd
         dummy_message = await client.get_messages(chat_id=1733124290, message_ids=f["file_id"])
         await client.send_message(1733124290, "w")
-        await process_queue(client, dummy_message, file_type)
+        await process_queue(client, dummy_message, file_type, dump)
     
     await callback_query.answer("Renaming ended.")
     await db.remove_batch(user_id, batch_no)
@@ -50,7 +50,7 @@ async def handle_re_callback(client, callback_query):
     
 
 
-async def process_queue(bot, update, type):
+async def process_queue(bot, update, type, dump):
     client = bot
     await client.send_message(1733124290, "wbn")
     if not os.path.isdir("Metadata"):
@@ -209,7 +209,7 @@ async def process_queue(bot, update, type):
                 from_chat = filw.chat.id
                 mg_id = filw.id
                 time.sleep(2)
-                await bot.copy_message(update.from_user.id, from_chat, mg_id)
+                await bot.copy_message(dump, from_chat, mg_id)
                 await ms.delete()
                 await bot.delete_messages(from_chat, mg_id)
 
@@ -229,7 +229,7 @@ async def process_queue(bot, update, type):
             if type == "document":
                 await client.send_message(1733124290, "111111oooooooo11kk")
                 await bot.send_document(
-                    update.from_user.id,
+                    dump,
                     document=metadata_path if _bool_metadata else file_path,
                     thumb=ph_path,
                     caption=caption,
@@ -237,7 +237,7 @@ async def process_queue(bot, update, type):
                     progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
             elif type == "video":
                 await bot.send_video(
-                    update.from_user.id,
+                    dump,
                     video=metadata_path if _bool_metadata else file_path,
                     caption=caption,
                     thumb=ph_path,
@@ -248,7 +248,7 @@ async def process_queue(bot, update, type):
                     progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
             elif type == "audio":
                 await bot.send_audio(
-                    update.from_user.id,
+                    dump,
                     audio=metadata_path if _bool_metadata else file_path,
                     caption=caption,
                     thumb=ph_path,
