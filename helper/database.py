@@ -83,20 +83,12 @@ class Database:
             {'$set': {'sydd': sydd, 'syddd': syddd}}  # Update 'sydd' and 'syddd' fields
         )
 
-    async def set_sydson(self, id, syd):
-        await self.col.update_one({'_id': int(id)}, {'$set': {'syd': syd}})
+    async def set_dump(self, id, dump: int):
+        await self.col.update_one({'_id': int(id)}, {'$set': {'dump': int(dump)}})
 
-    async def set_topic(self, id, syd: int):
-        await self.col.update_one({'_id': int(id)}, {'$set': {'topic': int(syd)}})
-    
-    async def get_sydson(self, id):
+    async def get_dump(self, id):
         user = await self.col.find_one({'_id': int(id)})
-        return user.get('sydson', id)
-    
-    async def get_topic(self, id):
-        user = await self.col.find_one({'_id': int(id)})
-        return user.get('topic', int(id))
-
+        return user.get('dump', int(id))   
    
     async def set_active_batch(self, user_id: int, batch_no: int):
         await self.active_batches.update_one(
