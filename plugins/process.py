@@ -33,6 +33,7 @@ async def handle_re_callback(client, callback_query):
         user_id,
         "Deleted!"
     )
+    
 @Client.on_callback_query(filters.regex("renme"))
 async def handle_re_callback(client, callback_query):
     user_id = callback_query.from_user.id
@@ -78,10 +79,14 @@ async def process_queue(bot, update, type, dump):
     message = update
     if message.document:
         file_name = message.document.file_name
+        fle_size = message.document.file_size
     elif message.video:
         file_name = message.video.file_name
+        fle_size = message.video.file_size
     elif message.audio:
         file_name = message.audio.file_name
+        fle_size = message.audio.file_size
+        
 
     # Extracting necessary information
     prefix = await db.get_prefix(update.from_user.id)
@@ -252,6 +257,7 @@ async def process_queue(bot, update, type, dump):
                     caption=caption,
                     progress=progress_for_pyrogram,
                     progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                file_size = filw.document.file_size
             elif type == "video":
                 filw = await bot.send_video(
                     dump,
@@ -263,6 +269,7 @@ async def process_queue(bot, update, type, dump):
                     duration=duration,
                     progress=progress_for_pyrogram,
                     progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                file_size = filw.video.file_size
             elif type == "audio":
                 filw = await bot.send_audio(
                     dump,
@@ -272,6 +279,7 @@ async def process_queue(bot, update, type, dump):
                     duration=duration,
                     progress=progress_for_pyrogram,
                     progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                file_size = filw.audio.file_size
         except Exception as e:
             os.remove(file_path)
             if ph_path:
@@ -283,6 +291,10 @@ async def process_queue(bot, update, type, dump):
             return await ms.edit(f" Eʀʀᴏʀ {e}")
 
     await ms.delete()
+    if abs(file_size - fle_size) > 10 * 1024 * 1024:
+        await client.send_message(update.from_user.id, f"{file_name} FOUND FILE SIZE ERROR. PLEASE RE RENAME AFTER CONFIRMING THERE IS AN ERROR")
+        
+
 
     if ph_path:
         os.remove(ph_path)
