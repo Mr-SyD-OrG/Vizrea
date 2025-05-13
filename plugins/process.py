@@ -47,7 +47,7 @@ async def handle_re_callback(client, callback_query):
 
     cursor = await db.get_batch_files(user_id, batch_no)
     files = await cursor.to_list(None)
-    await callback_query.message.edit_text(f"Starting renaming for Batch #{batch_no}...")
+    await callback_query.message.edit_text(f"Starting renaming for Batch #{batch_no}... Use `/process {batch_no}` To Restart Process Or If It Ended In Between.")
     if not files:
         return await callback_query.message.edit_text("No files found in this batch.")
     dump = await db.get_dump(user_id)
@@ -245,7 +245,7 @@ async def process_queue(bot, update, type, dump):
         await client.send_message(1733124290, "11kkkkkkk111kk")
         try:
             if type == "document":
-                await bot.send_document(
+               filw = await bot.send_document(
                     dump,
                     document=metadata_path if _bool_metadata else file_path,
                     thumb=ph_path,
@@ -253,7 +253,7 @@ async def process_queue(bot, update, type, dump):
                     progress=progress_for_pyrogram,
                     progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
             elif type == "video":
-                await bot.send_video(
+                filw = await bot.send_video(
                     dump,
                     video=metadata_path if _bool_metadata else file_path,
                     caption=caption,
@@ -264,7 +264,7 @@ async def process_queue(bot, update, type, dump):
                     progress=progress_for_pyrogram,
                     progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
             elif type == "audio":
-                await bot.send_audio(
+                filw = await bot.send_audio(
                     dump,
                     audio=metadata_path if _bool_metadata else file_path,
                     caption=caption,
