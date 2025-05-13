@@ -5,6 +5,28 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
 from plugins.features import features_button
 
+@Client.on_callback_query(filters.regex('^allinone'))
+async def handle_filters(bot: Client, query: CallbackQuery):
+    user_id = query.from_user.id
+    type = query.data.split('_')[1]
+    if type == 'metadata':
+        get_meta = await db.get_metadata(user_id)
+
+        if get_meta:
+            await db.set_metadata(user_id, False)
+        else:
+            await db.set_metadata(user_id, True)
+        button = [[
+                InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+                InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
+            ],[
+                InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")
+            ],[
+                InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")
+        ]]
+        await query.message.edit_reply_markup(button)
+    
+
 
 @Client.on_message(filters.private & filters.command('del_dump'))
 async def delete_dump(client, message):
@@ -75,14 +97,15 @@ async def end_batch(client, message):
         text += "\n".join(f"- {f['file_name']}" for f in files)
 
     text += f"\n Current Dump Channel : {dump} \n If You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
+    get_meta = await db.get_metadata(user_id)
     button = [[
-        InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
-        InlineKeyboardButton('✅' if metadata else '❌', callback_data='filters_metadata')
-      ],[
-        [InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")],
-        [InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")]
+            InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+            InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
+        ],[
+            InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")
+        ],[
+            InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")
     ]]
-
     await message.reply_text(text, reply_markup=button)
 
 
@@ -116,25 +139,23 @@ async def end_batch(client, message):
     text = f"Received {len(files)} files in Batch #{batch_no}\n"
     if len(files) > 15:
         for f in files:
-            part = f["file_name"]
+            part = f["file_nme"]
             episode = next((x for x in part.split() if "ep" in x.lower() or "720" in x or "1080" in x), "File")
             text += f"- {episode}\n"
     else:
         text += "\n".join(f"- {f['file_name']}" for f in files)
 
     text += f"\n Current Dump Channel : {dump} \n If You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
-    markup = await features_button(message.from_user.id)
-
-    # Add your custom buttons below the feature buttons
-    extra_buttons = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")],
-        [InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")]
-    ])
-
-    markup.inline_keyboard.extend(extra_buttons.inline_keyboard)
-
-    await message.reply_text(text, reply_markup=markup)
-
+    get_meta = await db.get_metadata(user_id)
+    button = [[
+            InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+            InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
+        ],[
+            InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")
+        ],[
+            InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")
+    ]]
+    await message.reply_text(text, reply_markup=button)
 
 @Client.on_message(filters.private & (filters.document | filters.video))
 async def handle_sedia(client, message):
