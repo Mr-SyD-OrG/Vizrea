@@ -6,6 +6,36 @@ import asyncio
 from plugins.features import features_button
 
 
+@Client.on_message(filters.private & filters.command('del_dump'))
+async def delete_dump(client, message):
+
+    SyD = await message.reply_text("Please Wait ...", reply_to_message_id=message.id)
+    dump = await db.get_dump(message.from_user.id)
+    if not dump:
+        return await SyD.edit("__**😔 ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴀɴʏ ᴅᴜᴍᴩ ᴄʜᴀɴɴᴇʟ**__")
+    await db.set_dump(message.from_user.id, message.from_user.id)
+    await SyD.edit("__**❌️ ᴅᴜᴍᴩ ᴅᴇʟᴇᴛᴇᴅ**__")
+
+
+@Client.on_message(filters.private & filters.command('see_dump'))
+async def see_dump(client, message):
+
+    SyD = await message.reply_text("Please Wait ...", reply_to_message_id=message.id)
+    dump = await db.get_dump(message.from_user.id)
+    if dump:
+        await SyD.edit(f"**ʏᴏᴜʀ ᴅᴜᴍʙ ᴄʜᴀɴɴᴇʟ:-**\n\n`{dump}`")
+    else:
+        await SyD.edit("__**😔 ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴀɴʏ ᴅᴜᴍʙ ᴄʜᴀɴɴᴇʟ**__")
+
+@Client.on_message(filters.private & filters.command('set_dump'))
+async def add_dump(client, message):
+
+    if len(message.command) == 1:
+        return await message.reply_text("**__Give The Dump Channel_\n\nExᴀᴍᴩʟᴇ:- `/set_dump -100XXXXXXX`**")
+    dump = message.text.split(" ", 1)[1]
+    SyD = await message.reply_text("Please Wait ...", reply_to_message_id=message.id)
+    await db.set_dump(message.from_user.id, dump)
+    await SyD.edit("__**✅ ꜱᴀᴠᴇᴅ**__")
 
 
 @Client.on_message(filters.command("batch") & filters.private)
