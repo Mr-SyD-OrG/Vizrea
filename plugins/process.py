@@ -108,7 +108,7 @@ async def process_queue(bot, update, type):
         metadata = await db.get_metadata_code(update.from_user.id)
         if metadata:
             await ms.edit("I Fᴏᴜɴᴅ Yᴏᴜʀ Mᴇᴛᴀᴅᴀᴛᴀ\n\n__**Pʟᴇᴀsᴇ Wᴀɪᴛ...**__\n**Aᴅᴅɪɴɢ Mᴇᴛᴀᴅᴀᴛᴀ Tᴏ Fɪʟᴇ....**")            
-            if change_metadata(dl_path, metadata_path, metadata):            
+            if await change_metadata(dl_path, metadata_path, metadata):            
                 await ms.edit("Metadata Added.....")
                 print("Metadata Added.....")
         await ms.edit("**Metadata added to the file successfully ✅**\n\n⚠️ __**Please wait...**__\n\n**Tʀyɪɴɢ Tᴏ Uᴩʟᴏᴀᴅɪɴɢ....**")
