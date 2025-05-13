@@ -13,6 +13,28 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+def metadata_text(metadata_code):
+    author = None
+    title = None
+    video_title = None
+    audio_title = None
+    subtitle_title = None
+
+    flags = [i.strip() for i in metadata_code.strip().split('--') if i.strip()]
+    for f in flags:
+        if f.startswith("change-author"):
+            author = f[len("change-author"):].strip()
+        elif f.startswith("change-title"):
+            title = f[len("change-title"):].strip()
+        elif f.startswith("change-video-title"):
+            video_title = f[len("change-video-title"):].strip()
+        elif f.startswith("change-audio-title"):
+            audio_title = f[len("change-audio-title"):].strip()
+        elif f.startswith("change-subtitle-title"):
+            subtitle_title = f[len("change-subtitle-title"):].strip()
+
+    return author, title, video_title, audio_title, subtitle_title
+
 async def download_image(url, save_path):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
