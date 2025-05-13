@@ -3,7 +3,7 @@ from helper.database import db
 import re
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 import asyncio
-from plugins.features import featres_button
+from plugins.features import features_button
 
 
 @Client.on_message(filters.private & filters.command('del_dump'))
@@ -75,7 +75,7 @@ async def end_batch(client, message):
         text += "\n".join(f"- {f['file_name']}" for f in files)
 
     text += f"\n Current Dump Channel : {dump} \n If You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
-    markup = await featres_button(message.from_user.id)
+    markup = await features_button(message.from_user.id)
 
     # Add your custom buttons below the feature buttons
     extra_buttons = InlineKeyboardMarkup([
@@ -83,7 +83,56 @@ async def end_batch(client, message):
         [InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")]
     ])
 
-    # Extend the inline keyboard
+    markup.inline_keyboard.extend(extra_buttons.inline_keyboard)
+
+    await message.reply_text(text, reply_markup=markup)
+
+
+@Client.on_message(filters.command("process") & filters.private)
+async def end_batch(client, message):
+    user_id = message.from_user.id
+    parts = message.text.split(maxsplit=2)
+
+    if len(parts) != 3:
+        return await message.reply_text(
+            "**Usage:** `/process <batch_no> <type>`\n\n"
+            "Example: `/process 12 document or video or audio`",
+            parse_mode=enums.ParseMode.MARKDOWN
+        )
+
+    
+    batch_no = int(parts[1])
+    process_type = parts[2].strip().lower()
+    if process_type != "document" or "video" or "audio":
+        return await message.reply_text("No valid type found.")
+
+    files_cursor = await db.get_batch_files(user_id, batch_no)
+    files = await files_cursor.to_list(length=None)
+
+    if not files:
+        return await message.reply_text("No files found in this batch.")
+
+    dump = await db.get_dump(user_id)
+
+
+    text = f"Received {len(files)} files in Batch #{batch_no}\n"
+    if len(files) > 15:
+        for f in files:
+            part = f["file_name"]
+            episode = next((x for x in part.split() if "ep" in x.lower() or "720" in x or "1080" in x), "File")
+            text += f"- {episode}\n"
+    else:
+        text += "\n".join(f"- {f['file_name']}" for f in files)
+
+    text += f"\n Current Dump Channel : {dump} \n If You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
+    markup = await features_button(message.from_user.id)
+
+    # Add your custom buttons below the feature buttons
+    extra_buttons = InlineKeyboardMarkup([
+        [InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")],
+        [InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")]
+    ])
+
     markup.inline_keyboard.extend(extra_buttons.inline_keyboard)
 
     await message.reply_text(text, reply_markup=markup)
