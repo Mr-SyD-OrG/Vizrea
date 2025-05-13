@@ -17,6 +17,20 @@ async def features_button(user_id):
     return InlineKeyboardMarkup(button)
 
 
+async def features_button(user_id):
+    metadata = await db.get_metadata(user_id)
+
+    button = [[
+        InlineKeyboardButton(
+            'ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+        InlineKeyboardButton('✅' if metadata else '❌',
+                             callback_data='filters_metadata')
+    ]
+    ]
+
+    return InlineKeyboardMarkup(button)
+
+
 @Client.on_callback_query(filters.regex('^filters'))
 async def handle_filters(bot: Client, query: CallbackQuery):
     user_id = query.from_user.id
