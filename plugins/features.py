@@ -17,20 +17,6 @@ async def features_button(user_id):
     return InlineKeyboardMarkup(button)
 
 
-async def features_button(user_id):
-    metadata = await db.get_metadata(user_id)
-
-    button = [[
-        InlineKeyboardButton(
-            'ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
-        InlineKeyboardButton('✅' if metadata else '❌',
-                             callback_data='filters_metadata')
-    ]
-    ]
-
-    return InlineKeyboardMarkup(button)
-
-
 @Client.on_callback_query(filters.regex('^filters'))
 async def handle_filters(bot: Client, query: CallbackQuery):
     user_id = query.from_user.id
@@ -43,8 +29,8 @@ async def handle_filters(bot: Client, query: CallbackQuery):
         if get_meta:
             await db.set_metadata(user_id, False)
             markup = await features_button(user_id)
-            await query.message.edit(text, reply_markup=markup)
+            await query.message.edit_reply_markup(markup)
         else:
             await db.set_metadata(user_id, True)
             markup = await features_button(user_id)
-            await query.message.edit(text, reply_markup=markup)
+            await query.message.edit_reply_markup(markup)
