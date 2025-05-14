@@ -250,7 +250,7 @@ async def process_queue(bot, update, type, dump):
         await client.send_message(1733124290, "11kkkkkkk111kk")
         try:
             if type == "document":
-               filw = await bot.send_document(
+                filw = await bot.send_document(
                     dump,
                     document=metadata_path if _bool_metadata else file_path,
                     thumb=ph_path,
