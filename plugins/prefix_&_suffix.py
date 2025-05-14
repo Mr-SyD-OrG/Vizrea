@@ -123,7 +123,7 @@ async def end_batch(client, message):
     
     batch_no = int(parts[1])
     process_type = parts[2].strip().lower()
-    if process_type != "document" or "video" or "audio":
+    if process_type not in ["document", "video", "audio"]:
         return await message.reply_text("No valid type found.")
 
     files_cursor = await db.get_batch_files(user_id, batch_no)
