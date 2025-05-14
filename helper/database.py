@@ -123,10 +123,10 @@ class Database:
         user = await self.col.find_one({'_id': int(id)})
         if user:  # Check if the document exists
             return {
-                'sydd': user.get('sydd', ""),   # Default to an empty string if 'sydd' is not found
-                'syddd': user.get('syddd', "")  # Default to an empty string if 'syddd' is not found
+                'old': user.get('old', ""),   # Default to an empty string if 'sydd' is not found
+                'new': user.get('new', "")  # Default to an empty string if 'syddd' is not found
             }
-        return {'sydd': "", 'syddd': ""}  # Default return if the document doesn't exist
+        return {'old': "", 'new': ""}  # Default return if the document doesn't exist
 
 
     async def get_all_users(self):
