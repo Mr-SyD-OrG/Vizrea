@@ -1,7 +1,7 @@
 from pyrogram import Client, filters, enums
 from helper.database import db
 import re
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 import asyncio
 from plugins.features import features_button
 
