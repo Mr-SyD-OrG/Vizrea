@@ -261,7 +261,7 @@ async def delete_rep(client, message):
     await db.set_rep(message.from_user.id, None, None)
     await SyD.edit("__**❌️ ᴘʀᴇꜰɪx ᴅᴇʟᴇᴛᴇᴅ**__")
 
-@Client.on_message(filters.private & filters.command('set_topic'))
+@Client.on_message(filters.private & filters.command('set_swap'))
 async def add_topic(client, message):
     if len(message.command) < 2:
         return await message.reply_text("Usage: `/swap old:new [old2:new2 ...]`", parse_mode=enums.ParseMode.MARKDOWN)
