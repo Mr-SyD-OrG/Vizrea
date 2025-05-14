@@ -17,10 +17,10 @@ async def handle_filters(bot: Client, query: CallbackQuery):
         else:
             await db.set_metadata(user_id, True)
         button = [[
-                InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+                InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
                 InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
             ],[
-                InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
+                InlineKeyboardButton("File Type", callback_data="allinone_curiousity"),
                 InlineKeyboardButton("Document", callback_data=f"renme_{batch_no}_d")
             ],[
                 InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_v")
@@ -40,15 +40,18 @@ async def handle_filters(bot: Client, query: CallbackQuery):
         await query.message.edit_reply_markup(button)
     elif type == 'video':
         button = [[
-                InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+                InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
                 InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
             ],[
-                InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
+                InlineKeyboardButton("File Type", callback_data="allinone_curiousity"),
                 InlineKeyboardButton("Video", callback_data="allinone_docum")
             ],[
                 InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_v")
         ]]
         await query.message.edit_reply_markup(button)
+    
+    elif type == 'curiousity':
+        await callback_query.answer(text="The Other Button..!", show_alert=True)
 
 
     
@@ -124,10 +127,10 @@ async def end_batch(client, message):
     text += f"\n Current Dump Channel : {dump} \n If You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
     get_meta = await db.get_metadata(user_id)
     button = [[
-            InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+            InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
             InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
         ],[
-            InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
+            InlineKeyboardButton("File Type", callback_data="allinone_curiousity"),
             InlineKeyboardButton("Document", callback_data="allinone_video")
         ],[
             InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_d")
@@ -174,10 +177,10 @@ async def end_btch(client, message):
     text += f"\n\nCurrent Dump Channel : {dump} \n\nIf You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
     get_meta = await db.get_metadata(user_id)
     button = [[
-            InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+            InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
             InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
         ],[
-            InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
+            InlineKeyboardButton("File Type", callback_data="allinone_curiousity"),
             InlineKeyboardButton("Document", callback_data="allinone_video")
         ],[
             InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_d")
