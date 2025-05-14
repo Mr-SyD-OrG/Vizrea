@@ -92,8 +92,12 @@ async def process_queue(bot, update, type, dump):
     prefix = await db.get_prefix(update.from_user.id)
     suffix = await db.get_suffix(update.from_user.id)
     new_name = file_name.replace("_", " ")
+    swaps = await db.get_swaps(update.from_user.id)
     rep_data = await db.get_rep(update.from_user.id)
     try:
+        if swaps:
+            for old, new in swaps.items():
+                new_name = new_name.replace(old, new)
         if rep_data['old'] in new_name:
             new_name = new_name.replace(rep_data['old'], rep_data['new'])
     except Exception as e:
