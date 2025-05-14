@@ -86,12 +86,11 @@ async def end_batch(client, message):
 
     dump = await db.get_dump(user_id)
 
-
     text = f"Received {len(files)} files in Batch #{batch_no}\n"
     if len(files) > 15:
         for f in files:
             part = f["file_name"]
-            episode = next((x for x in part.split() if "ep" in x.lower() or "720" in x or "1080" in x or "480"), "File")
+            episode = next((x for x in part.split() if "ep" in x.lower() or "720" in x or "1080" in x or "480" in x), "File")
             text += f"- {episode}\n"
     else:
         text += "\n".join(f"- {f['file_name']}" for f in files)
