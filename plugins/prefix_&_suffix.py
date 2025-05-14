@@ -104,12 +104,12 @@ async def end_batch(client, message):
             InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")
         ],[
             InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")
-    ]]
+        ]]
     await message.reply_text(text, reply_markup=button)
 
 
 @Client.on_message(filters.command("process") & filters.private)
-async def end_batch(client, message):
+async def end_btch(client, message):
     user_id = message.from_user.id
     parts = message.text.split(maxsplit=2)
 
