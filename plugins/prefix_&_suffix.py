@@ -154,7 +154,7 @@ async def end_batch(client, message):
         ],[
             InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")
     ]]
-    await message.reply_text(text, reply_markup=button)
+    await message.reply_text(text, reply_markup=InlineKeyboardMarkup(button))
 
 @Client.on_message(filters.private & (filters.document | filters.video))
 async def handle_sedia(client, message):
