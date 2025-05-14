@@ -20,11 +20,37 @@ async def handle_filters(bot: Client, query: CallbackQuery):
                 InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
                 InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
             ],[
-                InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")
+                InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
+                InlineKeyboardButton("Document", callback_data=f"renme_{batch_no}_d")
             ],[
-                InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")
+                InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_v")
         ]]
         await query.message.edit_reply_markup(button)
+
+    elif type == 'docum':
+        button = [[
+                InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+                InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
+            ],[
+                InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
+                InlineKeyboardButton("Document", callback_data="allinone_video")
+            ],[
+                InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_d")
+        ]]
+        await query.message.edit_reply_markup(button)
+    elif type == 'video':
+        button = [[
+                InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
+                InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
+            ],[
+                InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
+                InlineKeyboardButton("Video", callback_data="allinone_docum")
+            ],[
+                InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_v")
+        ]]
+        await query.message.edit_reply_markup(button)
+
+
     
 
 
@@ -101,10 +127,11 @@ async def end_batch(client, message):
             InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
             InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
         ],[
-            InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")
+            InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
+            InlineKeyboardButton("Document", callback_data="allinone_video")
         ],[
-            InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")
-        ]]
+            InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_d")
+    ]]
     await message.reply_text(text, reply_markup=button)
 
 
@@ -144,15 +171,16 @@ async def end_btch(client, message):
     else:
         text += "\n".join(f"- {f['file_name']}" for f in files)
 
-    text += f"\n Current Dump Channel : {dump} \n If You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
+    text += f"\n\nCurrent Dump Channel : {dump} \n\nIf You Want To Change Thumbnail, Send Picture Then And Dump Channel By /set_dump ."
     get_meta = await db.get_metadata(user_id)
     button = [[
             InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
             InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata')
         ],[
-            InlineKeyboardButton("Rename As Document", callback_data=f"renme_{batch_no}_d")
+            InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
+            InlineKeyboardButton("Document", callback_data="allinone_video")
         ],[
-            InlineKeyboardButton("Rename As Video", callback_data=f"renme_{batch_no}_v")
+            InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_d")
     ]]
     await message.reply_text(text, reply_markup=InlineKeyboardMarkup(button))
 
