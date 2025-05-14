@@ -12,8 +12,11 @@ class Config(object):
     BOT_TOKEN = os.environ.get("BOT_TOKEN", "")  # ⚠️ Required
 
     # database config
-    DB_NAME = os.environ.get("DB_NAME", "Sigma_Rename")
+    DB_NAME = os.environ.get("DB_NAME", "Cluster0")
     DB_URL = os.environ.get("DB_URL", "")  # ⚠️ Required
+
+    SUPPORT = os.environ.get("SUPPORT", "syd_xyz") #Without @ Or Modify
+    UPDATES = os.environ.get("UPDATES", "syd_xyz") #Without @
 
     # other configs
     BOT_UPTIME = time.time()
@@ -43,13 +46,12 @@ Yᴏᴜ Cᴀɴ Rᴇɴᴀᴍᴇ & Cʜᴀɴɢᴇ Tʜᴜᴍʙɴᴀɪʟ Oꜰ Δɴʏ 
 
     ABOUT_TXT = """<b>╭───────────⍟
 ➥ ᴍy ɴᴀᴍᴇ : {}
-➥ Pʀᴏɢʀᴀᴍᴇʀ : <a href=https://t.me/SyD_Xyz>ꪑ𝘳 𝘴ꪗᦔ 🌐</a> 
-➥ Fᴏᴜɴᴅᴇʀ ᴏꜰ : <a href=https://t.me/BOT_cracker>B𝚘ᴛ ᑕяΔ¢к℮ґ 🎋</a>
-➥ Lɪʙʀᴀʀy : <a href=https://t.me/+oej8cujHMFJhNmI9>Cᴏʟʟᴇᴄᴛɪᴏɴ...</a>
-➥ Lᴀɴɢᴜᴀɢᴇ: <a href=https://t.me/+0Zi1FC4ulo8zYzVl>ʙΔᴄᴋ-Uᴩ 💦</a>
-➥ Dᴀᴛᴀ Bᴀꜱᴇ: <a href=https://t.me/+3-nuV_9INIg0MDY1>Dʙ ⚡</a>
-➥ ᴍʏ ꜱᴇʀᴠᴇʀ : <a href=https://t.me/Mod_Moviez_X>Tɢ 🗯️</a>
-➥ ᴠᴇʀsɪᴏɴ : v1.0
+➥ Pʀᴏɢʀᴀᴍᴇʀ : <a href=https://t.me/vizean>Vɪᴢᴇᴀɴ</a> 
+➥ Cᴏᴅᴇᴅ : ᴍʀ ꜱʏᴅ
+➥ Lᴀɴɢᴜᴀɢᴇ : ᴩʏᴛʜᴏɴ3
+➥ Dᴀᴛᴀ Bᴀꜱᴇ: ᴍᴏɴɢᴏᴅʙ
+➥ ᴍʏ ꜱᴇʀᴠᴇʀ : ᴩʀɪᴠᴀᴛᴇ
+➥ Vᴇʀsɪᴏɴ : v1.0
 ╰───────────────⍟ """
 
     HELP_TXT = """
@@ -114,5 +116,4 @@ Exᴀᴍᴩʟᴇ:- <code> /set_caption 📕 Fɪʟᴇ Nᴀᴍᴇ: {filename}
 ┣⪼ ⏳️ Dᴏɴᴇ : {0}%
 ┣⪼ 🚀 Sᴩᴇᴇᴅ: {3}/s
 ┣⪼ ⏰️ Eᴛᴀ: {4}
-┣⪼ 🩷 Bꪗ: @Bot_Cracker 🎋
 ╰━━━━━━━━━━━━━━━➣ </b>"""
