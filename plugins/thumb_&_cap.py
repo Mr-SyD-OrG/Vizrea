@@ -11,19 +11,6 @@ async def add_caption(client, message):
     await message.reply_text("__**✅ Cᴀᴩᴛɪᴏɴ Sᴀᴠᴇᴅ**__", reply_to_message_id=message.id)
 
 
-@Client.on_message(filters.private & filters.command("mrsyd"))
-async def swsydap_handler(client, message):
-    if len(message.command) < 2:
-        return await message.reply_text("Usage: `/swap old:new`", parse_mode=ParseMode.MARKDOWN)
-
-    try:
-        pair = message.text.split(None, 1)[1]
-        old, new = pair.split(":", 1)
-        await db.add_swap(message.from_user.id, old, new)
-        await message.reply(f"✅ Swap saved!\n`{old}` will be replaced with `{new}`", parse_mode=ParseMode.MARKDOWN)
-    except Exception as e:
-        await message.reply(f"❌ Failed to save swap.\n\nError: `{e}`", parse_mode=ParseMode.MARKDOWN)
-
 @Client.on_message(filters.private & filters.command('del_caption'))
 async def delete_caption(client, message):
     caption = await db.get_caption(message.from_user.id)
