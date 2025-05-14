@@ -264,12 +264,34 @@ async def delete_rep(client, message):
 @Client.on_message(filters.private & filters.command('set_topic'))
 async def add_topic(client, message):
     if len(message.command) < 2:
-        return await message.reply_text("Usage: `/swap old:new`", parse_mode=enums.ParseMode.MARKDOWN)
+        return await message.reply_text("Usage: `/swap old:new [old2:new2 ...]`", parse_mode=enums.ParseMode.MARKDOWN)
 
     try:
-        pair = message.text.split(None, 1)[1]
-        old, new = pair.split(":", 1)
-        await db.add_swap(message.from_user.id, old, new)
-        await message.reply(f"✅ Swap saved!\n`{old}` will be replaced with `{new}`", parse_mode=enums.ParseMode.MARKDOWN)
+        text = message.text.split(None, 1)[1]
+        pairs = text.split()
+
+        successful = []
+        failed = []
+
+        for pair in pairs:
+            if ":" in pair:
+                old, new = pair.split(":", 1)
+                await db.add_swap(message.from_user.id, old, new)
+                successful.append(f"`{old}` → `{new}`")
+            else:
+                failed.append(pair)
+
+        reply_text = ""
+        if successful:
+            reply_text += "✅ Saved swaps:\n" + "\n".join(successful)
+        if failed:
+            reply_text += "\n\n❌ Invalid format (missing `:`):\n" + "\n".join(f"`{f}`" for f in failed)
+
+        await message.reply(reply_text, parse_mode=enums.ParseMode.MARKDOWN)
+
     except Exception as e:
-        await message.reply(f"❌ Failed to save swap.\n\nError: `{e}`", parse_mode=enums.ParseMode.MARKDOWN)
+        await message.reply(f"❌ Failed to save swaps.\n\nError: `{e}`", parse_mode=enums.ParseMode.MARKDOWN)
+
+
+
+
