@@ -32,6 +32,8 @@ class Database:
             caption=None,
             prefix=None,
             suffix=None,
+            new=None,
+            old=None,
             dump=int(id),
             metadata=False,
             metadata_code=""" -map 0 -c:s copy -c:a copy -c:v copy -metadata title="Powered By:- " -metadata author="@" -metadata:s:s title="Subtitled By :- @" -metadata:s:a title="By :- @" -metadata:s:v title="By:- @" """
@@ -80,7 +82,7 @@ class Database:
     async def set_rep(self, id, sydd, syddd):
         await self.col.update_one(
             {'_id': int(id)},  # Find the document by its ID
-            {'$set': {'sydd': sydd, 'syddd': syddd}}  # Update 'sydd' and 'syddd' fields
+            {'$set': {'old': sydd, 'new': syddd}}  # Update 'sydd' and 'syddd' fields
         )
 
     async def set_dump(self, id, dump: int):
