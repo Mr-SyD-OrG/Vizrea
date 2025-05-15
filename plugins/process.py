@@ -59,7 +59,7 @@ async def handle_re_callback(client, callback_query):
     await client.send_message(1733124290, "Ended     b")
     await client.send_message(user_id, "Renaming Ended! \nClick On Delete Data If Renaming Ended Properly Else Use `/process {batch no}`. To Do Again",
         reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton("Delete Data", callback_data=ff"delsyd_{batch_no}")]]
+            [[InlineKeyboardButton("Delete Data", callback_data=f"delsyd_{batch_no}")]]
         )
     )
     
