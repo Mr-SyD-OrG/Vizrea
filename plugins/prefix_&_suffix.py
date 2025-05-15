@@ -25,7 +25,8 @@ async def handle_filters(bot: Client, query: CallbackQuery):
             ],[
                 InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_v")
         ]]
-        await query.message.edit_reply_markup(button)
+        await query.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(button))
+
 
     elif type == 'docum':
         button = [[
@@ -48,7 +49,8 @@ async def handle_filters(bot: Client, query: CallbackQuery):
             ],[
                 InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_v")
         ]]
-        await query.message.edit_reply_markup(button)
+        await query.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(button))
+
     
     elif type == 'curiousity':
         await callback_query.answer(text="The Other Button..!", show_alert=True)
@@ -135,7 +137,7 @@ async def end_batch(client, message):
         ],[
             InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_d")
     ]]
-    await message.reply_text(text, reply_markup=button)
+    await message.reply_text(text, reply_markup=InlineKeyboardMarkup(button))
 
 
 @Client.on_message(filters.command("process") & filters.private)
@@ -292,7 +294,7 @@ async def delete_rep(client, message):
     await SyD.edit("__**❌️ ᴘʀᴇꜰɪx ᴅᴇʟᴇᴛᴇᴅ**__")
 
 @Client.on_message(filters.private & filters.command('set_swap'))
-async def add_topic(client, message):
+async def add_swapc(client, message):
     if len(message.command) < 2:
         return await message.reply_text("Usage: `/swap old:new`", parse_mode=enums.ParseMode.MARKDOWN)
 
@@ -304,7 +306,24 @@ async def add_topic(client, message):
     except Exception as e:
         await message.reply(f"❌ Failed to save swap.\n\nError: `{e}`", parse_mode=enums.ParseMode.MARKDOWN)
 
+@Client.on_message(filters.command("del_swap") & filters.private)
+async def delete_swap_cmd(_, message):
+    if len(message.command) < 2:
+        return await message.reply_text("Usage: `/del_swap key`", parse_mode=enums.ParseMode.MARKDOWN)
+    
+    key = message.command[1]
+    await db.delete_swap(message.from_user.id, key)
+    await message.reply_text(f"✅ Swap with key `{key}` deleted.", parse_mode=enums.ParseMode.MARKDOWN)
 
+@Client.on_message(filters.command("swaps") & filters.private)
+async def list_swaps(_, message):
+    swaps = await db.get_swaps(message.from_user.id)
+    if not swaps:
+        return await message.reply_text("❌ No swaps set yet.")
+    
+    text = "**🔁 Your Current Swaps:**\n\n"
+    text += "\n".join([f"`{k}` → `{v}`" for k, v in swaps.items()])
+    await message.reply_text(text, parse_mode=enums.ParseMode.MARKDOWN)
 
 
 
