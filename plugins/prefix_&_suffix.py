@@ -15,9 +15,12 @@ async def hale_filters(bot: Client, query: CallbackQuery):
         get_meta = await db.get_metadata(user_id)
 
         if get_meta:
+            
             await db.set_metadata(user_id, False)
+            await bot.send_message(user_id, "Ended")
         else:
             await db.set_metadata(user_id, True)
+            await bot.send_message(user_id, "Ended")
         button = [[
                 InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
                 InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata_{batch_no}')
@@ -31,6 +34,7 @@ async def hale_filters(bot: Client, query: CallbackQuery):
 
 
     elif type == 'docum':
+        await bot.send_message(user_id, "Ended")
         button = [[
                 InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
                 InlineKeyboardButton('✅' if get_meta else '❌', callback_data=f'allinone_metadata_{batch_no}')
@@ -43,6 +47,7 @@ async def hale_filters(bot: Client, query: CallbackQuery):
         await query.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(button))
 
     elif type == 'video':
+        await bot.send_message(user_id, "Ended")
         button = [[
                 InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
                 InlineKeyboardButton('✅' if get_meta else '❌', callback_data=f'allinone_metadata_{batch_no}')
