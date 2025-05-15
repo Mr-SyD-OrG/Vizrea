@@ -90,11 +90,11 @@ async def process_queue(bot, update, type, dump):
     swaps = await db.get_swaps(update.from_user.id)
     rep_data = await db.get_rep(update.from_user.id)
     try:
+        fule_name = file_name.replace(rep_data['old'], rep_data['new'])
         if swaps:
             for old, new in swaps.items():
-                fule_name = file_name.replace(old, new)
+                fule_name = fule_name.replace(old, new)
         
-        fule_name = fule_name.replace(rep_data['old'], rep_data['new'])
     except Exception as e:
         await client.send_message(update.from_user.id, f"Error During Swap : {e}")
         pass
