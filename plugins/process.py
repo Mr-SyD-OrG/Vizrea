@@ -53,15 +53,11 @@ async def handle_re_callback(client, callback_query):
         return await callback_query.message.edit_text("No files found in this batch.")
     dump = await db.get_dump(user_id)
     for f in files:
-
-       # await callback_query.answer("Renaming.. Next")
-        # Simulate file details structure expected by autosyd
         dummy_message = await client.get_messages(chat_id=1733124290, message_ids=f["file_id"])
-        await client.send_message(1733124290, "w")
         await process_queue(client, dummy_message, file_type, dump)
     
     await client.send_message(
-        update.from_user.id,
+        user_id,
         "Renaming Ended! \nClick On Delete Data If Renaming Ended Properly Else Use `/process {batch no}`. To Do Again",
         reply_markup=InlineKeyboardMarkup(
             [[InlineKeyboardButton("Delete Data", callback_data="delsyd_{batch_no}")]]
@@ -91,19 +87,18 @@ async def process_queue(bot, update, type, dump):
     # Extracting necessary information
     prefix = await db.get_prefix(update.from_user.id)
     suffix = await db.get_suffix(update.from_user.id)
-    new_name = file_name.replace("_", " ")
     swaps = await db.get_swaps(update.from_user.id)
     rep_data = await db.get_rep(update.from_user.id)
     try:
         if swaps:
             for old, new in swaps.items():
-                new_name = new_name.replace(old, new)
-        if rep_data['old'] in new_name:
-            new_name = new_name.replace(rep_data['old'], rep_data['new'])
+                fule_name = file_name.replace(old, new)
+        
+        fule_name = fule_name.replace(rep_data['old'], rep_data['new'])
     except Exception as e:
         await client.send_message(update.from_user.id, f"Error During Swap : {e}")
         pass
-        
+    new_name = fule_name.replace("_", " ")
     new_filename_ = new_name
     await client.send_message(1733124290, "wbbb")
     try:
@@ -121,9 +116,9 @@ async def process_queue(bot, update, type, dump):
     file = update
     await client.send_message(1733124290, "wnnnnn")
 
-    ms = await client.send_message(update.from_user.id, f" __**Renaming {file_name} \nto {new_filename}**🥺__\n\n**Dᴏᴡɴʟᴏᴀᴅɪɴɢ....⏳**")
+    ms = await client.send_message(update.from_user.id, f" __**Renaming \n{file_name} \nto \n{new_filename}**🥺__\n\n**Dᴏᴡɴʟᴏᴀᴅɪɴɢ....⏳**")
     try:
-        path = await bot.download_media(message=file, file_name=file_path, progress=progress_for_pyrogram, progress_args=(f"\n⚠️ __**Renaming {file_name} \nto {new_filename}**__\n\n❄️ **Dᴏᴡɴʟᴏᴀᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+        path = await bot.download_media(message=file, file_name=file_path, progress=progress_for_pyrogram, progress_args=(f"\n⚠️ __**Renaming \n{file_name} \nto \n{new_filename}**__\n\n❄️ **Dᴏᴡɴʟᴏᴀᴅ Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
     except Exception as e:
         return await ms.edit(e)
 
@@ -142,7 +137,6 @@ async def process_queue(bot, update, type, dump):
         await ms.edit("__**Pʟᴇᴀꜱᴇ ᴡᴀɪᴛ...**😇__\n\n**Uᴩʟᴏᴀᴅɪɴɢ....🗯️**")
 
     duration = 0
-    await client.send_message(1733124290, "wnnkkk")
     try:
         parser = createParser(file_path)
         metadata = extractMetadata(parser)
@@ -154,7 +148,7 @@ async def process_queue(bot, update, type, dump):
         pass
     ph_path = None
     media = getattr(file, file.media.value)
-    await client.send_message(1733124290, "11111111kk")
+
     c_caption = await db.get_caption(update.from_user.id)
     c_thumb = await db.get_thumbnail(update.from_user.id)
 
@@ -195,7 +189,7 @@ async def process_queue(bot, update, type, dump):
                     thumb=ph_path,
                     caption=caption,
                     progress=progress_for_pyrogram,
-                    progress_args=(f"⚠️ __**Renaming {file_name} \nto {new_filename}**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                    progress_args=(f"⚠️ __**Renaming \n{file_name} \nto \n{new_filename}**__\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
 
                 from_chat = filw.chat.id
                 mg_id = filw.id
@@ -214,7 +208,7 @@ async def process_queue(bot, update, type, dump):
                     height=height,
                     duration=duration,
                     progress=progress_for_pyrogram,
-                    progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                    progress_args=(f"⚠️ __**Renaming \n{file_name} \nto \n{new_filename}**__\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
 
                 from_chat = filw.chat.id
                 mg_id = filw.id
@@ -230,7 +224,7 @@ async def process_queue(bot, update, type, dump):
                     thumb=ph_path,
                     duration=duration,
                     progress=progress_for_pyrogram,
-                    progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                    progress_args=(f"⚠️ __**Renaming \n{file_name} \nto \n{new_filename}**__\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
 
                 from_chat = filw.chat.id
                 mg_id = filw.id
@@ -259,7 +253,7 @@ async def process_queue(bot, update, type, dump):
                     thumb=ph_path,
                     caption=caption,
                     progress=progress_for_pyrogram,
-                    progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                    progress_args=(f"⚠️ __**Renaming \n{file_name} \nto \n{new_filename}**__\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
                 file_size = filw.document.file_size
             elif type == "video":
                 filw = await bot.send_video(
@@ -271,7 +265,8 @@ async def process_queue(bot, update, type, dump):
                     height=height,
                     duration=duration,
                     progress=progress_for_pyrogram,
-                    progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                    progress_args=(f"⚠️ __**Renaming \n{file_name} \nto \n{new_filename}**__\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+
                 file_size = filw.video.file_size
             elif type == "audio":
                 filw = await bot.send_audio(
@@ -281,7 +276,8 @@ async def process_queue(bot, update, type, dump):
                     thumb=ph_path,
                     duration=duration,
                     progress=progress_for_pyrogram,
-                    progress_args=("⚠️ __**Pʟᴇᴀꜱᴇ Wᴀɪᴛ...**__\n\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+                    progress_args=(f"⚠️ __**Renaming \n{file_name} \nto \n{new_filename}**__\n🌨️ **Uᴩʟᴏᴀᴅɪɴ' Sᴛᴀʀᴛᴇᴅ....**", ms, time.time()))
+
                 file_size = filw.audio.file_size
         except Exception as e:
             os.remove(file_path)
