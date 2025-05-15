@@ -58,6 +58,13 @@ class Database:
             {"$unset": {f"swaps.{key}": ""}}
         )
 
+    async def delete_batch(self, user_id: int, batch_no: int):
+        result = await self.batches.delete_many({
+             "user_id": user_id,
+             "batch_no": batch_no
+        })
+        return result.deleted_count
+
     async def get_swaps(self, user_id: int) -> dict:
         user = await self.usr.find_one({"_id": user_id})
         return user.get("swaps", {}) if user else {}
