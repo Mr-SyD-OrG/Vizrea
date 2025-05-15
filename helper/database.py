@@ -52,6 +52,12 @@ class Database:
             {"$set": {f"swaps.{key}": value}},
             upsert=True
         )
+    async def delete_swap(self, user_id: int, key: str):
+        await self.usr.update_one(
+            {"_id": user_id},
+            {"$unset": {f"swaps.{key}": ""}}
+        )
+
     async def get_swaps(self, user_id: int) -> dict:
         user = await self.usr.find_one({"_id": user_id})
         return user.get("swaps", {}) if user else {}
