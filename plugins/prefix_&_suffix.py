@@ -11,22 +11,22 @@ async def hale_filters(bot: Client, query: CallbackQuery):
     parts = query.data.split('_')
     type = parts[1]
     batch_no = int(parts[2]) if len(parts) > 2 else "1"
+    file = parts[3] if len(parts) > 3 else "d"
     get_meta = await db.get_metadata(user_id)
     if type == 'metadata':
-
         if get_meta:
-            
             await db.set_metadata(user_id, False)
-            await bot.send_message(user_id, "Ended")
+            await bot.send_message(user_id, "Set To False")
         else:
             await db.set_metadata(user_id, True)
-            await bot.send_message(user_id, "Ended")
+            await bot.send_message(user_id, "Set To True")
+        ge_meta = await db.get_metadata(user_id)
         button = [[
                 InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
-                InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata_{batch_no}')
+                InlineKeyboardButton('✅' if ge_meta else '❌', callback_data='allinone_metadata_{batch_no}_{file}')
             ],[
                 InlineKeyboardButton("File Type", callback_data="allinone_curiousity"),
-                InlineKeyboardButton("Document", callback_data=f"allinone_video_{batch_no}")
+                InlineKeyboardButton("Document" if file == "d" else "Video", callback_data=f"allinone_video_{batch_no}" if file == "d" else f"allinone_docum_{batch_no}")
             ],[
                 InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_v")
         ]]
@@ -34,10 +34,9 @@ async def hale_filters(bot: Client, query: CallbackQuery):
 
 
     elif type == 'docum':
-        await bot.send_message(user_id, "Ended")
         button = [[
-                InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='sydmetadata'),
-                InlineKeyboardButton('✅' if get_meta else '❌', callback_data=f'allinone_metadata_{batch_no}')
+                InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
+                InlineKeyboardButton('✅' if get_meta else '❌', callback_data=f'allinone_metadata_{batch_no}_d')
             ],[
                 InlineKeyboardButton("File Type", callback_data="allinone_curiosity"),
                 InlineKeyboardButton("Document", callback_data=f"allinone_video_{batch_no}")
@@ -47,10 +46,9 @@ async def hale_filters(bot: Client, query: CallbackQuery):
         await query.message.edit_reply_markup(reply_markup=InlineKeyboardMarkup(button))
 
     elif type == 'video':
-        await bot.send_message(user_id, "Ended")
         button = [[
                 InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
-                InlineKeyboardButton('✅' if get_meta else '❌', callback_data=f'allinone_metadata_{batch_no}')
+                InlineKeyboardButton('✅' if get_meta else '❌', callback_data=f'allinone_metadata_{batch_no}_v')
             ],[
                 InlineKeyboardButton("File Type", callback_data="allinone_curiousity"),
                 InlineKeyboardButton("Video", callback_data=f"allinone_docum_{batch_no}")
@@ -138,7 +136,7 @@ async def end_batch(client, message):
     get_meta = await db.get_metadata(user_id)
     button = [[
             InlineKeyboardButton('ᴍᴇᴛᴀᴅᴀᴛᴀ', callback_data='allinone_curiousity'),
-            InlineKeyboardButton('✅' if get_meta else '❌', callback_data=f'allinone_metadata_{batch_no}')
+            InlineKeyboardButton('✅' if get_meta else '❌', callback_data=f'allinone_metadata_{batch_no}_d')
         ],[
             InlineKeyboardButton("File Type", callback_data="allinone_curiousity"),
             InlineKeyboardButton("Document", callback_data=f"allinone_video_{batch_no}")
@@ -304,7 +302,7 @@ async def delete_rep(client, message):
 @Client.on_message(filters.private & filters.command('set_swap'))
 async def add_swapc(client, message):
     if len(message.command) < 2:
-        return await message.reply_text("Usage: `/swap old:new`", parse_mode=enums.ParseMode.MARKDOWN)
+        return await message.reply_text("Usage: `/set_swap old:new`", parse_mode=enums.ParseMode.MARKDOWN)
 
     try:
         pair = message.text.split(None, 1)[1]
