@@ -55,7 +55,7 @@ async def hale_filters(bot: Client, query: CallbackQuery):
 
     
     elif type == 'curiousity':
-        await callback_query.answer(text="The Other Button..!", show_alert=True)
+        await query.answer(text="The Other Button..!", show_alert=True)
 
 
     
