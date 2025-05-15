@@ -23,7 +23,7 @@ async def hale_filters(bot: Client, query: CallbackQuery):
                 InlineKeyboardButton('✅' if get_meta else '❌', callback_data='allinone_metadata_{batch_no}')
             ],[
                 InlineKeyboardButton("File Type", callback_data="allinone_curiousity"),
-                InlineKeyboardButton("Document", callback_data=f"renme_{batch_no}_d")
+                InlineKeyboardButton("Document", callback_data=f"allinone_{batch_no}_d")
             ],[
                 InlineKeyboardButton("Confirm", callback_data=f"renme_{batch_no}_v")
         ]]
