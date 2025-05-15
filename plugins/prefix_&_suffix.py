@@ -11,8 +11,8 @@ async def hale_filters(bot: Client, query: CallbackQuery):
     parts = query.data.split('_')
     type = parts[1]
     batch_no = int(parts[2]) if len(parts) > 2 else "1"
+    get_meta = await db.get_metadata(user_id)
     if type == 'metadata':
-        get_meta = await db.get_metadata(user_id)
 
         if get_meta:
             
