@@ -6,7 +6,7 @@ import asyncio
 from plugins.features import features_button
 
 @Client.on_callback_query(filters.regex('^allinone'))
-async def handle_filters(bot: Client, query: CallbackQuery):
+async def hale_filters(bot: Client, query: CallbackQuery):
     user_id = query.from_user.id
     type = query.data.split('_')[1]
     if type == 'metadata':
