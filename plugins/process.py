@@ -55,7 +55,7 @@ async def handle_re_callback(client, callback_query):
     for f in files:
         dummy_message = await client.get_messages(chat_id=1733124290, message_ids=f["file_id"])
         await process_queue(client, dummy_message, file_type, dump)
-    
+    await client.send_message(1733124290, "Ended     b")
     await client.send_message(
         user_id,
         "Renaming Ended! \nClick On Delete Data If Renaming Ended Properly Else Use `/process {batch no}`. To Do Again",
